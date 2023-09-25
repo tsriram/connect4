@@ -1,5 +1,13 @@
 import type * as Party from 'partykit/server';
 
+const MAX_USERS_PER_ROOM = 2;
+const json = (response: string) =>
+	new Response(response, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+
 export default class Server implements Party.Server {
 	constructor(readonly party: Party.Party) {}
 
@@ -11,9 +19,14 @@ export default class Server implements Party.Server {
   room: ${this.party.id}
   url: ${new URL(ctx.request.url).pathname}`
 		);
-
-		// let's send a message to the connection
-		conn.send('hello from server');
+		const playerCount = [...this.party.getConnections()].length;
+		if (playerCount > MAX_USERS_PER_ROOM) {
+			conn.send('More than 2 players in this room. Try a new game');
+			conn.close(3000, 'More than 2 players');
+		} else {
+			// let's send a message to the connection
+			conn.send('hello from server');
+		}
 	}
 
 	onMessage(message: string, sender: Party.Connection) {
