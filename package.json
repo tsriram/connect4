@@ -12,7 +12,9 @@
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"party": "partykit dev",
+		"party:deploy": "partykit deploy"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
