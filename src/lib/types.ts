@@ -4,7 +4,8 @@ export enum GAME_STATUS {
 	'INITIAL',
 	'WAITING_FOR_PLAYER2',
 	'PLAYING',
-	'PLAYER_DISCONNECTED'
+	'PLAYER_DISCONNECTED',
+	'COMPLETED'
 }
 
 export interface GameState {

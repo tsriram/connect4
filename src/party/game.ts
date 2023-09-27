@@ -1,6 +1,6 @@
 type Board = Array<Array<number>>;
 
-import type { GameState, PLAYER } from '../src/lib/types';
+import { GAME_STATUS, type GameState, type PLAYER } from '../lib/types';
 
 export const NUM_ROWS = 6;
 export const NUM_COLUMNS = 7;
@@ -27,6 +27,8 @@ export function updateBoard(board: number[][], colIndex: number, value: number):
 }
 
 export const INITIAL_STATE: GameState = {
+	message: '',
+	status: GAME_STATUS.INITIAL,
 	board: initialBoard,
 	player1: {
 		id: undefined,
@@ -36,9 +38,10 @@ export const INITIAL_STATE: GameState = {
 		id: undefined,
 		name: undefined
 	},
-	waitingFor: 'p1',
+	waitingFor: undefined,
 	winner: undefined
 };
+
 /*
 Example:
 const board = [
@@ -51,19 +54,25 @@ const board = [
 ];
 */
 
-// thank you ChatGPT - https://chat.openai.com/share/01f10033-69ff-4213-a9fd-9e507043c550
-export function findConsecutiveElements(arr: number[][], count: number = 4): number | null {
-	const numRows = arr.length;
-	if (numRows === 0) return null;
+// thank you ChatGPT - https://chat.openai.com/share/01f10033-69ff-4213-a9fd-9e507043c550 (modified from this)
+export function findConsecutiveNonZeroElements(
+	board: number[][],
+	count: number = 4
+): number | null {
+	console.log('board: ', JSON.stringify(board));
+	const numRows = board.length;
+	if (numRows === 0) {
+		return null;
+	}
+	const numCols = board[0].length;
 
-	const numCols = arr[0].length;
-
-	// Check horizontally
+	// horizontal
 	for (let row = 0; row < numRows; row++) {
 		let consecutiveCount = 1;
-		let currentElement = arr[row][0];
+		let prevElement = row[0];
 		for (let col = 1; col < numCols; col++) {
-			if (arr[row][col] === currentElement) {
+			const currentElement = board[row][col];
+			if (currentElement !== 0 && prevElement === currentElement) {
 				consecutiveCount++;
 				if (consecutiveCount === count) {
 					console.log('returning from horizontal');
@@ -71,42 +80,49 @@ export function findConsecutiveElements(arr: number[][], count: number = 4): num
 				}
 			} else {
 				consecutiveCount = 1;
-				currentElement = arr[row][col];
+				prevElement = currentElement;
 			}
 		}
 	}
 
-	// Check vertically
+	// vertical
 	for (let col = 0; col < numCols; col++) {
 		let consecutiveCount = 1;
-		let currentElement = arr[0][col];
+		let prevElement = col[0];
 		for (let row = 1; row < numRows; row++) {
-			if (arr[row][col] === currentElement) {
+			const currentElement = board[row][col];
+			if (currentElement !== 0 && prevElement === currentElement) {
 				consecutiveCount++;
 				if (consecutiveCount === count) {
-					console.log('returning from vertical', row, col);
+					console.log('returning from vertical');
 					return currentElement;
 				}
 			} else {
 				consecutiveCount = 1;
-				currentElement = arr[row][col];
+				prevElement = currentElement;
 			}
 		}
 	}
 
-	// Check diagonally (top-left to bottom-right)
+	// diagonal from top-left to bottom-right
 	for (let startRow = 0; startRow < numRows; startRow++) {
 		for (let startCol = 0; startCol < numCols; startCol++) {
 			let consecutiveCount = 1;
-			let currentElement = arr[startRow][startCol];
+			let prevElement = board[startRow][startCol];
 			for (let i = 1; i < count; i++) {
 				const row = startRow + i;
 				const col = startCol + i;
-				if (row < numRows && col < numCols && arr[row][col] === currentElement) {
-					consecutiveCount++;
-					if (consecutiveCount === count) {
-						console.log('returning from diagonal1');
-						return currentElement;
+				if (row < numRows && col < numCols) {
+					const currentElement = board[row][col];
+					if (currentElement !== 0 && prevElement === currentElement) {
+						consecutiveCount++;
+						if (consecutiveCount === count) {
+							console.log('returning from diagonal1');
+							return currentElement;
+						}
+					} else {
+						consecutiveCount = 1;
+						prevElement = currentElement;
 					}
 				} else {
 					break;
@@ -115,19 +131,25 @@ export function findConsecutiveElements(arr: number[][], count: number = 4): num
 		}
 	}
 
-	// Check diagonally (top-right to bottom-left)
+	// diagonal from top-right to bottom-left
 	for (let startRow = 0; startRow < numRows; startRow++) {
 		for (let startCol = numCols - 1; startCol >= 0; startCol--) {
 			let consecutiveCount = 1;
-			let currentElement = arr[startRow][startCol];
+			let prevElement = board[startRow][startCol];
 			for (let i = 1; i < count; i++) {
 				const row = startRow + i;
 				const col = startCol - i;
-				if (row < numRows && col >= 0 && arr[row][col] === currentElement) {
-					consecutiveCount++;
-					if (consecutiveCount === count) {
-						console.log('returning from diagonal2');
-						return currentElement;
+				if (row < numRows && col >= 0) {
+					const currentElement = board[row][col];
+					if (currentElement !== 0 && prevElement === currentElement) {
+						consecutiveCount++;
+						if (consecutiveCount === count) {
+							console.log('returning from diagonal2');
+							return currentElement;
+						}
+					} else {
+						consecutiveCount = 1;
+						prevElement = currentElement;
 					}
 				} else {
 					break;
@@ -137,25 +159,4 @@ export function findConsecutiveElements(arr: number[][], count: number = 4): num
 	}
 
 	return null;
-}
-
-function checkHorizontal(board: Board) {
-	for (let i = 0; i < NUM_ROWS; i++) {
-		const firstVal = board[i][0];
-		console.log('firstVal: ', firstVal);
-		let consecutiveEntries = 0;
-		for (let j = 1; j < NUM_COLUMNS; j++) {
-			console.log(`board[${i}][${j}]: `, board[i][j]);
-			if (board[i][j] === firstVal) {
-				consecutiveEntries++;
-				console.log('consecutiveEntries: ', consecutiveEntries);
-			} else {
-				break;
-			}
-			if (consecutiveEntries === STRIKE) {
-				return true;
-			}
-		}
-	}
-	return false;
 }

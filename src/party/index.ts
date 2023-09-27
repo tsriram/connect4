@@ -1,8 +1,10 @@
 import type * as Party from 'partykit/server';
-import { MessageType, type GameState, GAME_STATUS } from '../src/lib/types';
-import { updateBoard } from './game';
+import { MessageType, type GameState, GAME_STATUS } from '../lib/types';
+import { findConsecutiveElements, findConsecutiveNonZeroElements, updateBoard } from './game';
 
 const MAX_USERS_PER_ROOM = 2;
+const BOARD_VALUE_FOR_PLAYER1 = 1;
+const BOARD_VALUE_FOR_PLAYER2 = 2;
 // const json = (response: string) => {
 // 	return new Response(response, {
 // 		headers: {
@@ -92,12 +94,21 @@ export default class Server implements Party.Server {
 			}
 
 			case MessageType.UPDATE: {
-				if (this.state.waitingFor === sender.id) {
+				if (this.state.waitingFor === sender.id && this.state.status === GAME_STATUS.PLAYING) {
 					const isPlayer1 = this.state.player1.id === sender.id;
-					const valueToUpdate = isPlayer1 ? 1 : 2;
-					console.log('data.colIndex: ', data.colIndex);
+					const valueToUpdate = isPlayer1 ? BOARD_VALUE_FOR_PLAYER1 : BOARD_VALUE_FOR_PLAYER2;
 					this.state.board = updateBoard(this.state.board, data.colIndex, valueToUpdate);
-					this.state.waitingFor = isPlayer1 ? this.state.player2.id : this.state.player1.id;
+
+					const winningNumber = findConsecutiveNonZeroElements(this.state.board);
+					if (winningNumber === BOARD_VALUE_FOR_PLAYER1) {
+						this.state.status = GAME_STATUS.COMPLETED;
+						this.state.message = `Yay, ${this.state.player1.name} won!`;
+					} else if (winningNumber === BOARD_VALUE_FOR_PLAYER2) {
+						this.state.status = GAME_STATUS.COMPLETED;
+						this.state.message = `Yay, ${this.state.player2.name} won!`;
+					} else {
+						this.state.waitingFor = isPlayer1 ? this.state.player2.id : this.state.player1.id;
+					}
 					this.party.broadcast(JSON.stringify(this.state));
 				}
 				break;

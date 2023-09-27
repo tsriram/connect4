@@ -7,7 +7,21 @@
 	export let data: PageServerData;
 	let socket: PartySocket;
 	let socketClosed = false;
-	let gameState: GameState;
+	let gameState: GameState = {
+		message: '',
+		status: GAME_STATUS.INITIAL,
+		board: [],
+		player1: {
+			id: undefined,
+			name: undefined
+		},
+		player2: {
+			id: undefined,
+			name: undefined
+		},
+		waitingFor: undefined,
+		winner: undefined
+	};
 	let username: '';
 
 	function onMessage(event: MessageEvent) {
@@ -68,7 +82,7 @@
 <input name="username" autofocus bind:value={username} />
 <button on:click={startGame}>Start Game</button>
 
-{#if gameState?.status === GAME_STATUS.PLAYING}
+{#if gameState?.status != GAME_STATUS.INITIAL}
 	<div class="grid">
 		{#each gameState.board as row, rowIndex}
 			{#each row as col, colIndex}
