@@ -3,11 +3,15 @@
 	import PartySocket from 'partysocket';
 	import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
 	import { onMount, onDestroy } from 'svelte';
+	import { spring } from 'svelte/motion';
 	import { MessageType, type GameState, GAME_STATUS } from '$lib/types';
 	export let data: PageServerData;
 	let socket: PartySocket;
 	let socketClosed = false;
+	let transformSpring;
 	let gameState: GameState = {
+		newCoinCol: null,
+		newCoinRow: null,
 		message: '',
 		status: GAME_STATUS.INITIAL,
 		board: [],
@@ -28,6 +32,15 @@
 		console.log('onMessage: ', JSON.parse(event.data));
 		console.log('onMessage socket.id: ', socket.id);
 		gameState = JSON.parse(event.data);
+
+		if (gameState.newCoinCol !== null && gameState.newCoinRow !== null) {
+			// get the row to which the new coin was added
+			const position = (gameState.newCoinRow + 1) * (80 + 16) * -1;
+			console.log('position: ', position);
+			transformSpring = spring(position, { stiffness: 0.1, damping: 0.6 });
+			console.log('transformSpring: ', transformSpring);
+			transformSpring.set(0);
+		}
 	}
 
 	function onClose(event: CloseEvent) {
@@ -68,6 +81,7 @@
 			type: MessageType.UPDATE,
 			colIndex
 		};
+
 		socket.send(JSON.stringify(payload));
 	}
 </script>
@@ -86,11 +100,34 @@
 	<div class="grid">
 		{#each gameState.board as row, rowIndex}
 			{#each row as col, colIndex}
-				<span class="cell" class:player1={col === 1} class:player2={col === 2}>
+				<!-- <span class="cell" class:player1={col === 1} class:player2={col === 2}>
 					<button on:click={() => handleClick(colIndex)}>
 						{`${rowIndex}, ${colIndex} - ${col}`}
 					</button>
-				</span>
+				</span> -->
+				<button class="cell-button" on:click={() => handleClick(colIndex)}>
+					<span
+						class="cell"
+						class:player1={col === 1}
+						class:player2={col === 2}
+						style="--row-no:{rowIndex + 1}"
+					>
+						<!-- {`${rowIndex}, ${colIndex} - ${col}`} -->
+						{#if col === 1}
+							{#if rowIndex === gameState.newCoinRow && colIndex === gameState.newCoinCol}
+								<span class="coin player1" style="transform: translateY({$transformSpring}px);" />
+							{:else}
+								<span class="coin player1" />
+							{/if}
+						{:else if col === 2}
+							{#if rowIndex === gameState.newCoinRow && colIndex === gameState.newCoinCol}
+								<span class="coin player2" style="transform: translateY({$transformSpring}px);" />
+							{:else}
+								<span class="coin player2" />
+							{/if}
+						{/if}
+					</span>
+				</button>
 			{/each}
 		{/each}
 	</div>
@@ -99,12 +136,22 @@
 <style>
 	.grid {
 		display: grid;
+		padding: 32px;
+		width: fit-content;
 		gap: 16px;
+		background-color: bisque;
 		grid-template-rows: repeat(6, 1fr);
 		grid-template-columns: repeat(7, 80px);
 	}
+	.cell-button {
+		padding: 0;
+		margin: 0;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+	}
 	.cell {
-		background-color: grey;
+		background-color: white;
 		height: 80px;
 		width: 80px;
 		border-radius: 50%;
@@ -112,10 +159,22 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.cell.player1 {
+	.coin.player1 {
 		background-color: yellow;
 	}
-	.cell.player2 {
+	.coin.player2 {
 		background-color: red;
+	}
+	.coin {
+		height: 80px;
+		width: 80px;
+		border-radius: 50%;
+		background-color: hotpink;
+		position: absolute;
+		display: inline-block;
+		/* animation-name: fall-animation;
+		animation-duration: 400ms;
+		animation-timing-function: ease-in-out; */
+		border: 2px dashed;
 	}
 </style>

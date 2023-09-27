@@ -24,6 +24,8 @@ export default class Server implements Party.Server {
 	constructor(readonly party: Party.Party) {}
 
 	state: GameState = {
+		newCoinCol: null,
+		newCoinRow: null,
 		message: messages[GAME_STATUS.INITIAL],
 		status: GAME_STATUS.INITIAL,
 		player1: {
@@ -97,7 +99,10 @@ export default class Server implements Party.Server {
 				if (this.state.waitingFor === sender.id && this.state.status === GAME_STATUS.PLAYING) {
 					const isPlayer1 = this.state.player1.id === sender.id;
 					const valueToUpdate = isPlayer1 ? BOARD_VALUE_FOR_PLAYER1 : BOARD_VALUE_FOR_PLAYER2;
-					this.state.board = updateBoard(this.state.board, data.colIndex, valueToUpdate);
+					const { board, updatedRow } = updateBoard(this.state.board, data.colIndex, valueToUpdate);
+					this.state.board = board;
+					this.state.newCoinRow = updatedRow;
+					this.state.newCoinCol = data.colIndex;
 
 					const winningNumber = findConsecutiveNonZeroElements(this.state.board);
 					if (winningNumber === BOARD_VALUE_FOR_PLAYER1) {

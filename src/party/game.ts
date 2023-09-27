@@ -15,18 +15,26 @@ const initialBoard: number[][] = [
 	[0, 0, 0, 0, 0, 0, 0]
 ];
 
-export function updateBoard(board: number[][], colIndex: number, value: number): number[][] {
+export function updateBoard(
+	board: number[][],
+	colIndex: number,
+	value: number
+): { board: number[][]; updatedRow: number } {
 	// eslint-disable-next-line for-direction
-	for (let row = NUM_ROWS - 1; row > 0; row--) {
+	let updatedRow = 0;
+	for (let row = NUM_ROWS - 1; row >= 0; row--) {
 		if (board[row][colIndex] === 0) {
 			board[row][colIndex] = value;
+			updatedRow = row;
 			break;
 		}
 	}
-	return board;
+	return { updatedRow, board };
 }
 
 export const INITIAL_STATE: GameState = {
+	newCoinCol: null,
+	newCoinRow: null,
 	message: '',
 	status: GAME_STATUS.INITIAL,
 	board: initialBoard,

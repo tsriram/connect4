@@ -9,6 +9,8 @@ export enum GAME_STATUS {
 }
 
 export interface GameState {
+	newCoinCol: number | null;
+	newCoinRow: number | null;
 	message: string;
 	status: GAME_STATUS;
 	player1: {
