@@ -2,7 +2,7 @@
 	import type { PageServerData } from './$types';
 	import PartySocket from 'partysocket';
 	import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy, beforeUpdate } from 'svelte';
 	import { spring } from 'svelte/motion';
 	import { MessageType, type GameState, GAME_STATUS } from '$lib/types';
 	export let data: PageServerData;
@@ -92,11 +92,24 @@
 
 		socket.send(JSON.stringify(payload));
 	}
+
+	let showOverlay = false;
+	beforeUpdate(() => {
+		showOverlay =
+			gameState.status === GAME_STATUS.COMPLETED ||
+			gameState.status === GAME_STATUS.PLAYER_DISCONNECTED ||
+			gameState.status === GAME_STATUS.WAITING_FOR_PLAYER2;
+	});
+
+	console.log('showOverlay: ', showOverlay);
+	console.log('gameState: ', gameState);
 </script>
 
 <h1>Game page</h1>
 
-<h2>Game status: {gameState?.message}</h2>
+{#if gameState?.status === GAME_STATUS.PLAYING}
+	<h2>Game status: {gameState.message}</h2>
+{/if}
 
 {#if socketClosed}
 	<h2>Socket closed</h2>
@@ -109,6 +122,11 @@
 
 {#if gameState?.status != GAME_STATUS.INITIAL}
 	<div class="grid">
+		{#if showOverlay}
+			<div class="grid-overlay">
+				<h2>{gameState.message}</h2>
+			</div>
+		{/if}
 		{#each gameState.board as row, rowIndex}
 			{#each row as col, colIndex}
 				<!-- <span class="cell" class:player1={col === 1} class:player2={col === 2}>
@@ -154,6 +172,19 @@
 		background-color: bisque;
 		grid-template-rows: repeat(6, 1fr);
 		grid-template-columns: repeat(7, 80px);
+		position: relative;
+	}
+	.grid-overlay {
+		position: absolute;
+		background-color: hsl(0deg 0% 0% / 40%);
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		pointer-events: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	.cell-button {
 		padding: 0;
