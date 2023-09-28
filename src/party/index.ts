@@ -70,11 +70,16 @@ export default class Server implements Party.Server {
 	}
 
 	onClose(connection: Party.Connection): void | Promise<void> {
-		const didPlayer1Close = this.state.player1.id === connection.id;
-		const closedByPlayer = didPlayer1Close ? this.state.player1.name : this.state.player2.name;
-		this.state.message = `Sorry, ${closedByPlayer} has disconnected. You can't continue this game :(`;
-		this.state.status = GAME_STATUS.PLAYER_DISCONNECTED;
-		this.party.broadcast(JSON.stringify(this.state));
+		const playerCount = [...this.party.getConnections()].length;
+		if (playerCount === 0) {
+			this.resetState();
+		} else {
+			const didPlayer1Close = this.state.player1.id === connection.id;
+			const closedByPlayer = didPlayer1Close ? this.state.player1.name : this.state.player2.name;
+			this.state.message = `Sorry, ${closedByPlayer} has disconnected. You can't continue this game :(`;
+			this.state.status = GAME_STATUS.PLAYER_DISCONNECTED;
+			this.party.broadcast(JSON.stringify(this.state));
+		}
 	}
 
 	onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
