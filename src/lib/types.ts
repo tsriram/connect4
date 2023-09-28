@@ -28,5 +28,6 @@ export interface GameState {
 
 export enum MessageType {
 	JOIN,
-	UPDATE
+	UPDATE,
+	RESTART
 }

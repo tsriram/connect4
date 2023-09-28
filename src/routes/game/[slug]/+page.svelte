@@ -28,6 +28,14 @@
 	};
 	let username: '';
 
+	function restartGame() {
+		socket.send(
+			JSON.stringify({
+				type: MessageType.RESTART
+			})
+		);
+	}
+
 	function onMessage(event: MessageEvent) {
 		console.log('onMessage: ', JSON.parse(event.data));
 		console.log('onMessage socket.id: ', socket.id);
@@ -95,6 +103,9 @@
 {/if}
 <input name="username" autofocus bind:value={username} />
 <button on:click={startGame}>Start Game</button>
+{#if gameState.status === GAME_STATUS.COMPLETED}
+	<button on:click={restartGame}>Restart Game</button>
+{/if}
 
 {#if gameState?.status != GAME_STATUS.INITIAL}
 	<div class="grid">
@@ -138,7 +149,8 @@
 		display: grid;
 		padding: 32px;
 		width: fit-content;
-		gap: 16px;
+		row-gap: 20px;
+		column-gap: 16px;
 		background-color: bisque;
 		grid-template-rows: repeat(6, 1fr);
 		grid-template-columns: repeat(7, 80px);

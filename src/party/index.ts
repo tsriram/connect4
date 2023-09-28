@@ -21,36 +21,53 @@ const messages = {
 };
 
 export default class Server implements Party.Server {
-	constructor(readonly party: Party.Party) {}
+	constructor(readonly party: Party.Party) {
+		this.state = Server.getInitialState();
+	}
+	state: GameState;
 
-	state: GameState = {
-		newCoinCol: null,
-		newCoinRow: null,
-		message: messages[GAME_STATUS.INITIAL],
-		status: GAME_STATUS.INITIAL,
-		player1: {
-			id: undefined,
-			name: undefined
-		},
-		player2: {
-			id: undefined,
-			name: undefined
-		},
-		board: [
-			[0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0]
-		],
-		waitingFor: undefined,
-		winner: undefined
-	};
+	resetState() {
+		this.state = Server.getInitialState();
+	}
 
-	// onStart(): void | Promise<void> {
-	// 	this.state = INITIAL_STATE;
-	// }
+	restartGame() {
+		const initialState = Server.getInitialState();
+		this.state = {
+			...initialState,
+			player1: this.state.player1,
+			player2: this.state.player2,
+			status: GAME_STATUS.PLAYING,
+			message: `${this.state.player1.name} vs ${this.state.player2.name}`
+		};
+	}
+
+	static getInitialState(): GameState {
+		const initialState: GameState = {
+			newCoinCol: null,
+			newCoinRow: null,
+			message: messages[GAME_STATUS.INITIAL],
+			status: GAME_STATUS.INITIAL,
+			player1: {
+				id: undefined,
+				name: undefined
+			},
+			player2: {
+				id: undefined,
+				name: undefined
+			},
+			board: [
+				[0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0, 0, 0]
+			],
+			waitingFor: undefined,
+			winner: undefined
+		};
+		return initialState;
+	}
 
 	onClose(connection: Party.Connection): void | Promise<void> {
 		const didPlayer1Close = this.state.player1.id === connection.id;
@@ -116,6 +133,12 @@ export default class Server implements Party.Server {
 					}
 					this.party.broadcast(JSON.stringify(this.state));
 				}
+				break;
+			}
+
+			case MessageType.RESTART: {
+				this.restartGame();
+				this.party.broadcast(JSON.stringify(this.state));
 				break;
 			}
 
