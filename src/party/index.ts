@@ -20,11 +20,23 @@ const messages = {
 	[GAME_STATUS.PLAYER_DISCONNECTED]: 'Someone disconnected'
 };
 
+const json = (response: string) =>
+	new Response(response, {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+
 export default class Server implements Party.Server {
 	constructor(readonly party: Party.Party) {
 		this.state = Server.getInitialState();
 	}
 	state: GameState;
+
+	onRequest(req: Party.Request): Response | Promise<Response> {
+		const playerCount = [...this.party.getConnections()].length;
+		return json(JSON.stringify({ playerCount, gameState: this.state }));
+	}
 
 	resetState() {
 		this.state = Server.getInitialState();

@@ -5,6 +5,7 @@
 	import { onMount, onDestroy, beforeUpdate } from 'svelte';
 	import { spring } from 'svelte/motion';
 	import { MessageType, type GameState, GAME_STATUS } from '$lib/types';
+	// import GetUserName from '$lib/components/GetUserName.svelte';
 	export let data: PageServerData;
 	let socket: PartySocket;
 	let socketClosed = false;
@@ -58,17 +59,22 @@
 	}
 
 	function startGame() {
-		console.log('data.room: ', data.room);
+		console.log('data.room: ', data);
+		gameState = data.gameState;
 		socket = new PartySocket({
 			host: PUBLIC_PARTYKIT_HOST,
 			room: data.room
 		});
 
 		socket.addEventListener('open', (event) => {
+			const username =
+				gameState.player1.name === undefined ? data.slugData.player1 : data.slugData.player2;
+			console.log('gameState.player1.name: ', gameState.player1.name);
 			const payload = {
 				type: MessageType.JOIN,
 				name: username
 			};
+			console.log('payload: ', JSON.stringify(payload));
 			socket.send(JSON.stringify(payload));
 		});
 
@@ -103,64 +109,59 @@
 
 	console.log('showOverlay: ', showOverlay);
 	console.log('gameState: ', gameState);
+	startGame();
 </script>
 
-<h1>Game page</h1>
+<div class="game-container">
+	<h1>Connect4</h1>
 
-{#if gameState?.status === GAME_STATUS.PLAYING}
-	<h2>Game status: {gameState.message}</h2>
-{/if}
+	{#if gameState?.status === GAME_STATUS.PLAYING}
+		<h2>{gameState.message}</h2>
+	{/if}
 
-{#if socketClosed}
-	<h2>Socket closed</h2>
-{/if}
-<input name="username" autofocus bind:value={username} />
-<button on:click={startGame}>Start Game</button>
-{#if gameState.status === GAME_STATUS.COMPLETED}
-	<button on:click={restartGame}>Restart Game</button>
-{/if}
+	{#if socketClosed}
+		<h2>Socket closed</h2>
+	{/if}
 
-{#if gameState?.status != GAME_STATUS.INITIAL}
-	<div class="grid">
-		{#if showOverlay}
-			<div class="grid-overlay">
-				<h2>{gameState.message}</h2>
-			</div>
-		{/if}
-		{#each gameState.board as row, rowIndex}
-			{#each row as col, colIndex}
-				<!-- <span class="cell" class:player1={col === 1} class:player2={col === 2}>
-					<button on:click={() => handleClick(colIndex)}>
-						{`${rowIndex}, ${colIndex} - ${col}`}
+	<!-- <input name="username" bind:value={username} />
+	<button on:click={startGame}>Start Game</button> -->
+	<!-- <GetUserName {gameState} onSubmit={startGame} /> -->
+	{#if gameState.status === GAME_STATUS.COMPLETED}
+		<button on:click={restartGame}>Restart Game</button>
+	{/if}
+
+	{#if gameState?.status != GAME_STATUS.INITIAL}
+		<div class="grid">
+			{#if showOverlay}
+				<div class="grid-overlay">
+					<h2>{gameState.message}</h2>
+				</div>
+			{/if}
+			{#each gameState.board as row, rowIndex}
+				{#each row as col, colIndex}
+					<button class="cell-button" on:click={() => handleClick(colIndex)}>
+						<span class="cell" class:player1={col === 1} class:player2={col === 2}>
+							<!-- {`${rowIndex}, ${colIndex} - ${col}`} -->
+							{#if col === 1}
+								{#if rowIndex === gameState.newCoinRow && colIndex === gameState.newCoinCol}
+									<span class="coin player1" style="transform: translateY({$transformSpring}px);" />
+								{:else}
+									<span class="coin player1" />
+								{/if}
+							{:else if col === 2}
+								{#if rowIndex === gameState.newCoinRow && colIndex === gameState.newCoinCol}
+									<span class="coin player2" style="transform: translateY({$transformSpring}px);" />
+								{:else}
+									<span class="coin player2" />
+								{/if}
+							{/if}
+						</span>
 					</button>
-				</span> -->
-				<button class="cell-button" on:click={() => handleClick(colIndex)}>
-					<span
-						class="cell"
-						class:player1={col === 1}
-						class:player2={col === 2}
-						style="--row-no:{rowIndex + 1}"
-					>
-						<!-- {`${rowIndex}, ${colIndex} - ${col}`} -->
-						{#if col === 1}
-							{#if rowIndex === gameState.newCoinRow && colIndex === gameState.newCoinCol}
-								<span class="coin player1" style="transform: translateY({$transformSpring}px);" />
-							{:else}
-								<span class="coin player1" />
-							{/if}
-						{:else if col === 2}
-							{#if rowIndex === gameState.newCoinRow && colIndex === gameState.newCoinCol}
-								<span class="coin player2" style="transform: translateY({$transformSpring}px);" />
-							{:else}
-								<span class="coin player2" />
-							{/if}
-						{/if}
-					</span>
-				</button>
+				{/each}
 			{/each}
-		{/each}
-	</div>
-{/if}
+		</div>
+	{/if}
+</div>
 
 <style>
 	.grid {
