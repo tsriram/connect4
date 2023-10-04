@@ -8,19 +8,18 @@ export enum GAME_STATUS {
 	'COMPLETED' = 'COMPLETED'
 }
 
+export interface Player {
+	id: string | undefined;
+	name: string | undefined;
+}
+
 export interface GameState {
 	newCoinCol: number | null;
 	newCoinRow: number | null;
 	message: string;
 	status: GAME_STATUS;
-	player1: {
-		id: string | undefined;
-		name: string | undefined;
-	};
-	player2: {
-		id: string | undefined;
-		name: string | undefined;
-	};
+	player1: Player;
+	player2: Player;
 	board: number[][];
 	waitingFor: string | undefined;
 	winner: string | undefined;
@@ -30,4 +29,16 @@ export enum MessageType {
 	JOIN,
 	UPDATE,
 	RESTART
+}
+
+export interface SlugData {
+	player1: string | undefined;
+	player2: string | undefined;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface PartyData {
+	playerCount: number;
+	gameState: GameState;
 }
