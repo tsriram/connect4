@@ -99,10 +99,10 @@
 		justify-content: center;
 	}
 	.coin.player1 {
-		background-color: yellow;
+		background-color: var(--player1-color);
 	}
 	.coin.player2 {
-		background-color: red;
+		background-color: var(--player2-color);
 	}
 	.coin {
 		height: 80px;

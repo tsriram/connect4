@@ -19,7 +19,6 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		pointer-events: none;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

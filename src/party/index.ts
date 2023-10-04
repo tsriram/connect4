@@ -46,6 +46,7 @@ export default class Server implements Party.Server {
 		const initialState = Server.getInitialState();
 		this.state = {
 			...initialState,
+			waitingFor: this.state.player1.id,
 			player1: this.state.player1,
 			player2: this.state.player2,
 			status: GAME_STATUS.PLAYING,

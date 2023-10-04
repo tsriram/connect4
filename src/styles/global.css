@@ -26,6 +26,8 @@ html.dark {
 	--cell-text-color: #fff;
 	--button-bg-color: #1b2836;
 	--button-text-color: #fff;
+	--player1-color: #fde047;
+	--player2-color: #ef4444;
 }
 
 html.light {
@@ -36,4 +38,6 @@ html.light {
 	--cell-text-color: #1b2836;
 	--button-bg-color: #c2bcad;
 	--button-text-color: #1b2836;
+	--player1-color: #fde047;
+	--player2-color: #ef4444;
 }

@@ -1,23 +1,16 @@
 <script lang="ts">
 	import GameTurnIndicator from '$lib/components/GameTurnIndicator.svelte';
+	import GameTitle from '$lib/components/GameTitle.svelte';
 	import type { Player } from '$lib/types';
 
 	export let player1: Player;
 	export let player2: Player;
-	export let turn: string = '???';
-
-	$: {
-		if (turn !== undefined && player1.name !== undefined && player2.name !== undefined) {
-			turn = turn === player1.id ? player1.name : player2.name;
-		} else {
-			turn = '???';
-		}
-	}
+	export let turn: string;
 </script>
 
 <div class="game-header">
-	<strong>{player1.name}&nbsp;vs&nbsp;{player2.name ?? '???'}</strong>
-	<GameTurnIndicator {turn} />
+	<GameTitle {player1} {player2} />
+	<GameTurnIndicator {turn} {player1} {player2} />
 	<!-- <GameHeader /> -->
 	<!-- <GameBoard /> -->
 	<!-- <GameTurnIndicator /> -->
@@ -28,5 +21,6 @@
 		display: flex;
 		justify-content: space-between;
 		margin: 2rem 0;
+		font-size: 1.5rem;
 	}
 </style>

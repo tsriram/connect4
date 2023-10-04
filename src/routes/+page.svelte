@@ -1,4 +1,5 @@
 <script>
+	import HeaderCoin from '$lib/components/HeaderCoin.svelte';
 	import StartGame from '$lib/components/StartGame.svelte';
 </script>
 
@@ -9,6 +10,7 @@
 	<div class="container">
 		<StartGame />
 	</div>
+	<HeaderCoin player="player1" />
 </div>
 
 <style>
