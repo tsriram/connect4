@@ -1,23 +1,25 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { SLUG_API_ENDPOINT } from '$env/static/private';
+import { nanoid } from 'nanoid';
 
 export const actions: Actions = {
 	new: async ({ request }) => {
 		const data = await request.formData();
 		const username = data.get('username');
-		console.log('username: ', username);
 		if (!username) {
 			return fail(400, { username, missing: true });
 		}
+		const slug = nanoid();
 		const payload = {
-			player1: username
+			player1: username,
+			slug
 		};
-		const response = await fetch(SLUG_API_ENDPOINT, {
+		await fetch(SLUG_API_ENDPOINT, {
 			body: JSON.stringify(payload),
 			method: 'POST'
 		});
-		const { slug } = await response.json();
+		// const { slug } = await response.json();
 		throw redirect(302, `/game/${slug}`);
 	},
 	join: async ({ request }) => {
