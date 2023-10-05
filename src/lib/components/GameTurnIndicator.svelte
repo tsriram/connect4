@@ -20,15 +20,15 @@
 
 <div class="game-turn">
 	Current turn: {turnPlayerName}
-	{#if turnPlayerName !== undefined}
+	<!-- {#if turnPlayerName !== undefined}
 		<HeaderCoin player={turnPlayer} />
-	{/if}
+	{/if} -->
 </div>
 
 <style>
 	.game-turn {
 		display: flex;
 		align-items: center;
-		margin-right: -16px;
+		/* margin-right: -16px; */
 	}
 </style>

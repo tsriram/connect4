@@ -1,5 +1,6 @@
-<script lang="ts">
-	import JoinGame from '$lib/components/JoinGame.svelte';
+<script>
+	import GameForm from '$lib/components/GameForm.svelte';
+	import { GameFormType } from '$lib/types';
 </script>
 
-<JoinGame />
+<GameForm type={GameFormType.JOIN} />

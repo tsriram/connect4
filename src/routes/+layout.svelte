@@ -1,9 +1,12 @@
 <script lang="ts">
+	import Logo from '$lib/components/Logo.svelte';
 	import '../styles/global.css';
 </script>
 
 <div class="wrapper">
-	<!-- <header class="header">Header</header> -->
+	<header class="header">
+		<Logo />
+	</header>
 	<section class="middle">
 		<slot />
 	</section>
@@ -15,6 +18,10 @@
 		display: flex;
 		flex-direction: column;
 		min-height: 100%;
+		align-items: center;
+	}
+	.header {
+		margin: 2rem 0;
 	}
 	.middle {
 		display: flex;

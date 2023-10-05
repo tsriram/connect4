@@ -42,3 +42,8 @@ export interface PartyData {
 	playerCount: number;
 	gameState: GameState;
 }
+
+export enum GameFormType {
+	START = 'start',
+	JOIN = 'join'
+}

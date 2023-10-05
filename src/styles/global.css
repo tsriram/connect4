@@ -28,10 +28,12 @@ html.dark {
 	--button-text-color: #fff;
 	--player1-color: #fde047;
 	--player2-color: #ef4444;
+	--logo-url: url('/images/connect4-logo-dark.png');
 }
 
 html.light {
-	--bg-color: #f0ebd8;
+	/* --bg-color: #f0ebd8; */
+	--bg-color: #fff;
 	--text-color: #1b2836;
 	--grid-border-color: #655e56;
 	--cell-bg-color: #c2bcad;
@@ -40,4 +42,5 @@ html.light {
 	--button-text-color: #1b2836;
 	--player1-color: #fde047;
 	--player2-color: #ef4444;
+	--logo-url: url('/images/connect4-logo-light.png');
 }
