@@ -22,25 +22,20 @@ html.dark {
 	--bg-color: #243447;
 	--text-color: #fff;
 	--grid-border-color: #3d5566;
-	--cell-bg-color: #1b2836;
-	--cell-text-color: #fff;
-	--button-bg-color: #1b2836;
-	--button-text-color: #fff;
+	--cell-bg-color: #243447;
 	--player1-color: #fde047;
 	--player2-color: #ef4444;
 	--logo-url: url('/images/connect4-logo-dark.png');
+	--board-bg-color: #3d5566;
 }
 
 html.light {
-	/* --bg-color: #f0ebd8; */
-	--bg-color: #fff;
+	--bg-color: #f1f5f9;
 	--text-color: #1b2836;
-	--grid-border-color: #655e56;
-	--cell-bg-color: #c2bcad;
-	--cell-text-color: #1b2836;
-	--button-bg-color: #c2bcad;
-	--button-text-color: #1b2836;
+	--grid-border-color: #1e40af;
+	--cell-bg-color: #f1f5f9;
 	--player1-color: #fde047;
 	--player2-color: #ef4444;
 	--logo-url: url('/images/connect4-logo-light.png');
+	--board-bg-color: #2563eb;
 }

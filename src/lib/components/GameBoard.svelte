@@ -84,10 +84,12 @@
 		width: fit-content;
 		row-gap: 20px;
 		column-gap: 16px;
-		background-color: bisque;
+		background-color: var(--board-bg-color);
 		grid-template-rows: repeat(6, 1fr);
 		grid-template-columns: repeat(7, 80px);
 		position: relative;
+		box-shadow: 0px 0px 4px 4px var(--grid-border-color);
+		border-radius: 8px;
 	}
 	.cell-button {
 		padding: 0;
@@ -97,7 +99,7 @@
 		cursor: pointer;
 	}
 	.cell {
-		background-color: white;
+		background-color: var(--cell-bg-color);
 		height: 80px;
 		width: 80px;
 		border-radius: 50%;

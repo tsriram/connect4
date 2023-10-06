@@ -33,5 +33,6 @@
 		padding: 1rem;
 		align-items: center;
 		justify-content: center;
+		margin-top: 4rem;
 	}
 </style>
