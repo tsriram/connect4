@@ -19,7 +19,14 @@
 	let showRestartButton: boolean = false;
 	let isMyTurn = true;
 	$: isMyTurn = gameState.waitingFor === currentUserId;
+	// let overlayMessage = ""
 	beforeUpdate(() => {
+		// const isPlayerDisconnected = !(gameState.player1.connected && gameState.player2.connected)
+		// if (isPlayerDisconnected) {
+		// 	overlayMessage = ''
+		// 	showOverlay = true;
+		// 	console.log('showOverlay: ', showOverlay);
+		// }
 		showOverlay =
 			gameState.status === GAME_STATUS.COMPLETED ||
 			gameState.status === GAME_STATUS.PLAYER_DISCONNECTED ||

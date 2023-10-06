@@ -11,9 +11,11 @@ export enum GAME_STATUS {
 export interface Player {
 	id: string | undefined;
 	name: string | undefined;
+	connected: boolean;
 }
 
 export interface GameState {
+	slug: string | undefined;
 	newCoinCol: number | null;
 	newCoinRow: number | null;
 	message: string;

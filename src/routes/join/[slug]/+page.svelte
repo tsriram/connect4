@@ -1,6 +1,21 @@
 <script>
 	import GameForm from '$lib/components/GameForm.svelte';
 	import { GameFormType } from '$lib/types';
+	export let data;
 </script>
 
-<GameForm type={GameFormType.JOIN} />
+<div>
+	{#if data.player1Name}
+		<p class="invite-text">
+			Yay! {data.player1Name} has invited you to play Connect 4.
+		</p>
+	{/if}
+	<GameForm type={GameFormType.JOIN} />
+</div>
+
+<style>
+	.invite-text {
+		font-size: 1.25rem;
+		margin: 3rem 0;
+	}
+</style>

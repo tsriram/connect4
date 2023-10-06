@@ -1,58 +1,33 @@
+import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
 import { redirect, fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import { SLUG_API_ENDPOINT } from '$env/static/private';
 import { nanoid } from 'nanoid';
 
 export const actions: Actions = {
-	new: async ({ request }) => {
+	new: async ({ request, cookies }) => {
 		const data = await request.formData();
 		const username = data.get('username');
 		if (!username) {
 			return fail(400, { username, missing: true });
 		}
 		const slug = nanoid();
+		const player1Id = nanoid();
 		const payload = {
-			player1: username,
+			player1: {
+				name: username,
+				id: player1Id
+			},
 			slug
 		};
-		await fetch(SLUG_API_ENDPOINT, {
+		const partykitUrl = `${PUBLIC_PARTYKIT_HOST}/party/${slug}`;
+		await fetch(partykitUrl, {
 			body: JSON.stringify(payload),
 			method: 'POST'
 		});
-		// const { slug } = await response.json();
-		throw redirect(302, `/game/${slug}`);
-	},
-	join: async ({ request }) => {
-		const url = new URL(request.url);
-		console.log('request.url: ', request.url);
-		const slugToUpdate = url.pathname;
-		console.log('slugToUpdate: ', slugToUpdate);
-		const data = await request.formData();
-		const username = data.get('username');
-		if (!username) {
-			return fail(400, { username, missing: true });
-		}
-		const payload = {
-			player2: username
-		};
-		const response = await fetch(`${SLUG_API_ENDPOINT}/${slugToUpdate}`, {
-			body: JSON.stringify(payload),
-			method: 'PUT'
+		cookies.set('userid', player1Id, {
+			path: `/game/${slug}`
 		});
-		const { slug } = await response.json();
+		// const { slug } = await response.json();
 		throw redirect(302, `/game/${slug}`);
 	}
 };
-
-// export const POST: RequestHandler = async ({ request }) => {
-// 	const { username } = await request.json();
-// 	const payload = {
-// 		player1: username
-// 	};
-// 	const response = await fetch(SLUG_API_ENDPOINT, {
-// 		body: JSON.stringify(payload),
-// 		method: 'POST'
-// 	});
-// 	const { slug } = await response.json();
-// 	throw redirect(302, `/game/${slug}`);
-// };

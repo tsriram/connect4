@@ -20,6 +20,20 @@ const messages = {
 	[GAME_STATUS.PLAYER_DISCONNECTED]: 'Someone disconnected'
 };
 
+interface PostData {
+	slug: string;
+	player1?: {
+		name: string;
+		id: string;
+	};
+	player2?: {
+		name: string;
+		id: string;
+	};
+}
+
+const storageKey = 'gameState';
+
 const json = (response: string) =>
 	new Response(response, {
 		headers: {
@@ -33,9 +47,59 @@ export default class Server implements Party.Server {
 	}
 	state: GameState;
 
-	onRequest(req: Party.Request): Response | Promise<Response> {
-		const playerCount = [...this.party.getConnections()].length;
-		return json(JSON.stringify({ playerCount, gameState: this.state }));
+	async onStart(): void | Promise<void> {
+		const storedState = await this.party.storage.get<GameState>(storageKey);
+		if (storedState !== undefined) {
+			this.state = storedState;
+		}
+	}
+
+	async onRequest(request: Party.Request): Promise<Response> {
+		const url = new URL(request.url);
+		// get `abc` from "http://127.0.0.1:1999/party/abc"
+		const slug = url.pathname.substring(url.pathname.lastIndexOf('/') + 1);
+
+		if (request.method === 'POST') {
+			this.state.slug = slug;
+			const payload = await request.json<PostData>();
+			if (payload.player1 !== undefined) {
+				this.state.player1.id = payload.player1.id;
+				this.state.player1.name = payload.player1.name;
+			}
+			await this.party.storage.put(storageKey, this.state);
+		}
+
+		if (request.method === 'PUT') {
+			const payload = await request.json<PostData>();
+			const storedState = this.party.storage.get(storageKey, {
+				noCache: true
+			});
+			if (!storedState) {
+				return new Response('Invalid slug', {
+					status: 400
+				});
+			}
+			if (payload.player2 !== undefined) {
+				this.state.player2.id = payload.player2.id;
+				this.state.player2.name = payload.player2.name;
+			}
+			console.log('POST storage.put state: ', JSON.stringify(this.state));
+			await this.party.storage.put(storageKey, this.state);
+		}
+
+		if (request.method === 'GET') {
+			const storedState = await this.party.storage.get<GameState>(storageKey, {
+				noCache: true
+			});
+			if (storedState === undefined) {
+				return new Response('Not found', {
+					status: 404
+				});
+			}
+			const playerCount = [...this.party.getConnections()].length;
+			return json(JSON.stringify({ playerCount, gameState: this.state }));
+		}
+		return json(JSON.stringify({ status: 'success' }));
 	}
 
 	resetState() {
@@ -56,17 +120,20 @@ export default class Server implements Party.Server {
 
 	static getInitialState(): GameState {
 		const initialState: GameState = {
+			slug: undefined,
 			newCoinCol: null,
 			newCoinRow: null,
 			message: messages[GAME_STATUS.INITIAL],
 			status: GAME_STATUS.INITIAL,
 			player1: {
 				id: undefined,
-				name: undefined
+				name: undefined,
+				connected: false
 			},
 			player2: {
 				id: undefined,
-				name: undefined
+				name: undefined,
+				connected: false
 			},
 			board: [
 				[0, 0, 0, 0, 0, 0, 0],
@@ -83,30 +150,56 @@ export default class Server implements Party.Server {
 	}
 
 	onClose(connection: Party.Connection): void | Promise<void> {
-		const playerCount = [...this.party.getConnections()].length;
-		if (playerCount === 0) {
-			this.resetState();
-		} else {
-			const didPlayer1Close = this.state.player1.id === connection.id;
-			const closedByPlayer = didPlayer1Close ? this.state.player1.name : this.state.player2.name;
-			this.state.message = `Sorry, ${closedByPlayer} has disconnected. You can't continue this game :(`;
-			this.state.status = GAME_STATUS.PLAYER_DISCONNECTED;
-			this.party.broadcast(JSON.stringify(this.state));
+		// const playerCount = [...this.party.getConnections()].length;
+		// if (playerCount === 0) {
+		// 	this.resetState();
+		// } else {
+		if (connection.id === this.state.player1.id) {
+			this.state.player1.connected = false;
+			this.state.message = `${this.state.player1.name} is disconnected! Waiting for them to join back...`;
+		} else if (connection.id === this.state.player2.id) {
+			this.state.player2.connected = false;
+			this.state.message = `${this.state.player2.name} is disconnected! Waiting for them to join back...`;
 		}
+		this.state.status = GAME_STATUS.PLAYER_DISCONNECTED;
+		// const didPlayer1Close = this.state.player1.id === connection.id;
+		// const closedByPlayer = didPlayer1Close ? this.state.player1.name : this.state.player2.name;
+		// this.state.message = `Sorry, ${closedByPlayer} has disconnected. You can't continue this game :(`;
+		// this.state.status = GAME_STATUS.PLAYER_DISCONNECTED;
+		this.party.broadcast(JSON.stringify(this.state));
+		// }
 	}
 
-	onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
-		console.log('onConnect conn.id: ', conn.id);
+	onConnect(connection: Party.Connection, ctx: Party.ConnectionContext) {
+		console.log('onConnect conn.id: ', connection.id);
 		// Close any new connection if there's already 2 players in the room
 		const playerCount = [...this.party.getConnections()].length;
 		console.log('playerCount: ', playerCount);
 		if (playerCount > MAX_USERS_PER_ROOM) {
-			conn.send(JSON.stringify({ message: 'More than 2 players in this room. Try a new game' }));
-			conn.close(3000, 'More than 2 players');
+			connection.send(
+				JSON.stringify({ message: 'More than 2 players in this room. Try a new game' })
+			);
+			connection.close(3000, 'More than 2 players');
 			return;
 		}
 
-		conn.send(JSON.stringify(this.state));
+		if (connection.id === this.state.player1.id) {
+			this.state.player1.connected = true;
+			this.state.waitingFor = this.state.waitingFor || connection.id;
+			if (!this.state.player2.connected) {
+				this.state.status = GAME_STATUS.WAITING_FOR_PLAYER2;
+				this.state.message = messages[this.state.status];
+			} else {
+				this.state.status = GAME_STATUS.PLAYING;
+				this.state.message = '';
+			}
+		} else if (connection.id === this.state.player2.id) {
+			this.state.player2.connected = true;
+			this.state.status = GAME_STATUS.PLAYING;
+			this.state.message = `${this.state.player1.name} vs ${this.state.player2.name}`;
+		}
+
+		this.party.broadcast(JSON.stringify(this.state));
 	}
 
 	onMessage(message: string, sender: Party.Connection) {

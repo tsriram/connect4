@@ -8,7 +8,7 @@
 
 	export let gameState: GameState;
 	export let room: string;
-	export let slugData: SlugData;
+	export let userid: string;
 
 	let socket: PartySocket;
 	let socketDisconnected = false;
@@ -46,21 +46,22 @@
 		// gameState = gameState;
 		socket = new PartySocket({
 			host: PUBLIC_PARTYKIT_HOST,
-			room: room
+			room: room,
+			id: userid
 		});
 
-		socket.addEventListener('open', (event) => {
-			console.log('socket open listener');
-			const username = gameState.player1?.name === undefined ? slugData.player1 : slugData.player2;
-			console.log('gameState.player1.name: ', gameState.player1?.name);
-			const payload = {
-				type: MessageType.JOIN,
-				name: username
-			};
-			console.log('payload: ', JSON.stringify(payload));
-			socket.send(JSON.stringify(payload));
-			socketDisconnected = false;
-		});
+		// socket.addEventListener('open', (event) => {
+		// 	console.log('socket open listener');
+		// 	const username = gameState.player1?.name === undefined ? slugData.player1 : slugData.player2;
+		// 	console.log('gameState.player1.name: ', gameState.player1?.name);
+		// 	const payload = {
+		// 		type: MessageType.JOIN,
+		// 		name: username
+		// 	};
+		// 	console.log('payload: ', JSON.stringify(payload));
+		// 	socket.send(JSON.stringify(payload));
+		// 	socketDisconnected = false;
+		// });
 
 		socket.addEventListener('message', onMessage);
 
@@ -87,7 +88,11 @@
 </script>
 
 <div>
-	<GameHeader player1={gameState.player1} player2={gameState.player2} turn={gameState.waitingFor} />
+	<GameHeader
+		player1={gameState.player1}
+		player2={gameState.player2}
+		turn={gameState.waitingFor || '???'}
+	/>
 	<GameBoard
 		{gameState}
 		{socketDisconnected}
