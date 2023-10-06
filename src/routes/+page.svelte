@@ -3,4 +3,24 @@
 	import { GameFormType } from '$lib/types';
 </script>
 
-<GameForm type={GameFormType.START} />
+<div>
+	<p class="help-text">
+		<a href="https://en.wikipedia.org/wiki/Connect_Four" rel="noopener" target="_blank"
+			>What's Connect 4?</a
+		>
+	</p>
+	<GameForm type={GameFormType.START} />
+</div>
+
+<style>
+	.help-text {
+		font-size: 1rem;
+		text-align: center;
+		margin-bottom: 6rem;
+	}
+
+	.help-text a {
+		color: var(--text-color);
+		text-decoration: underline;
+	}
+</style>

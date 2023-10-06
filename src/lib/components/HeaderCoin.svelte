@@ -14,6 +14,7 @@
 		height: 40px;
 		border-radius: 50%;
 		margin: 0 16px;
+		border: 2px dashed;
 	}
 	.header-coin.player1 {
 		background-color: var(--player1-color);
