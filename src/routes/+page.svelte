@@ -21,6 +21,9 @@
 
 	.help-text a {
 		color: var(--text-color);
+		text-decoration: none;
+	}
+	.help-text a:hover {
 		text-decoration: underline;
 	}
 </style>
