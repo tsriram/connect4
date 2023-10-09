@@ -27,11 +27,9 @@
 		} catch {
 			console.error('Error setting row size');
 		}
-		console.log('onMount rowSize: ', rowSize);
 	});
 
 	function restartGame() {
-		console.log('restarting game');
 		socket.send(
 			JSON.stringify({
 				type: MessageType.RESTART
@@ -40,22 +38,17 @@
 	}
 
 	function onMessage(event: MessageEvent) {
-		console.log('onMessage: ', JSON.parse(event.data));
-		console.log('onMessage socket.id: ', socket.id);
 		gameState = JSON.parse(event.data);
 
 		if (gameState.newCoinCol !== null && gameState.newCoinRow !== null) {
 			// get the row to which the new coin was added
 			const position = (gameState.newCoinRow + 1) * (rowSize + rowGap) * -1;
-			console.log('position: ', position);
 			transformSpring = spring(position, { stiffness: 0.1, damping: 0.6 });
-			console.log('transformSpring: ', transformSpring);
 			transformSpring.set(0);
 		}
 	}
 
 	function onClose(event: CloseEvent) {
-		console.log('event: ', event);
 		socketDisconnected = true;
 	}
 
@@ -66,19 +59,6 @@
 			room: room,
 			id: userid
 		});
-
-		// socket.addEventListener('open', (event) => {
-		// 	console.log('socket open listener');
-		// 	const username = gameState.player1?.name === undefined ? slugData.player1 : slugData.player2;
-		// 	console.log('gameState.player1.name: ', gameState.player1?.name);
-		// 	const payload = {
-		// 		type: MessageType.JOIN,
-		// 		name: username
-		// 	};
-		// 	console.log('payload: ', JSON.stringify(payload));
-		// 	socket.send(JSON.stringify(payload));
-		// 	socketDisconnected = false;
-		// });
 
 		socket.addEventListener('message', onMessage);
 

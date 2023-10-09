@@ -1,17 +1,5 @@
-import { GAME_STATUS, type GameState } from '../lib/types';
-
 export const NUM_ROWS = 6;
 export const NUM_COLUMNS = 7;
-export const STRIKE = 4;
-
-const initialBoard: number[][] = [
-	[0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0]
-];
 
 export function updateBoard(
 	board: number[][],
@@ -29,27 +17,6 @@ export function updateBoard(
 	}
 	return { updatedRow, board };
 }
-
-export const INITIAL_STATE: GameState = {
-	slug: undefined,
-	newCoinCol: null,
-	newCoinRow: null,
-	message: '',
-	status: GAME_STATUS.INITIAL,
-	board: initialBoard,
-	player1: {
-		id: undefined,
-		name: undefined,
-		connected: false
-	},
-	player2: {
-		id: undefined,
-		name: undefined,
-		connected: false
-	},
-	waitingFor: undefined,
-	winner: undefined
-};
 
 /*
 Example:
@@ -74,11 +41,8 @@ export function isBoardFull(board: number[][]): boolean {
 }
 
 // thank you ChatGPT - https://chat.openai.com/share/01f10033-69ff-4213-a9fd-9e507043c550 (modified from this)
-export function findConsecutiveNonZeroElements(
-	board: number[][],
-	count: number = 4
-): number | null {
-	console.log('board: ', JSON.stringify(board));
+export function findConsecutiveNonZeroElements(board: number[][]): number | null {
+	const count = 4;
 	const numRows = board.length;
 	if (numRows === 0) {
 		return null;
@@ -94,7 +58,6 @@ export function findConsecutiveNonZeroElements(
 			if (currentElement !== 0 && prevElement === currentElement) {
 				consecutiveCount++;
 				if (consecutiveCount === count) {
-					console.log('returning from horizontal');
 					return currentElement;
 				}
 			} else {
@@ -113,7 +76,6 @@ export function findConsecutiveNonZeroElements(
 			if (currentElement !== 0 && prevElement === currentElement) {
 				consecutiveCount++;
 				if (consecutiveCount === count) {
-					console.log('returning from vertical');
 					return currentElement;
 				}
 			} else {
@@ -136,7 +98,6 @@ export function findConsecutiveNonZeroElements(
 					if (currentElement !== 0 && prevElement === currentElement) {
 						consecutiveCount++;
 						if (consecutiveCount === count) {
-							console.log('returning from diagonal1');
 							return currentElement;
 						}
 					} else {
@@ -163,7 +124,6 @@ export function findConsecutiveNonZeroElements(
 					if (currentElement !== 0 && prevElement === currentElement) {
 						consecutiveCount++;
 						if (consecutiveCount === count) {
-							console.log('returning from diagonal2');
 							return currentElement;
 						}
 					} else {

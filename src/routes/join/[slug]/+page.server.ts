@@ -10,7 +10,6 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 	const partykitUrl = `${PUBLIC_PARTYKIT_HOST}/party/${room}`;
 	const partyResponse = await fetch(partykitUrl);
 	if (partyResponse.status === 200) {
-		console.log('partyResponse: ', partyResponse);
 		const { playerCount, gameState }: PartyData = await partyResponse.json();
 		if (playerCount >= 2) {
 			throw error(409);
@@ -27,7 +26,6 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 
 export const actions: Actions = {
 	join: async ({ request, params, cookies }) => {
-		console.log('join action from join route');
 		const slug = params.slug;
 		const data = await request.formData();
 		const username = data.get('username');

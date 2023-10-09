@@ -13,28 +13,12 @@
 	export let onRestart: () => void;
 
 	export let transformSpring: Spring<number>;
-	// let transformSpring = spring(80, { stiffness: 0.1, damping: 0.6 });
-	// if (gameState.newCoinCol !== null && gameState.newCoinRow !== null) {
-	// 	// get the row to which the new coin was added
-	// 	const position = (gameState.newCoinRow + 1) * (80 + 16) * -1;
-	// 	console.log('position: ', position);
-	// 	transformSpring = spring(position, { stiffness: 0.1, damping: 0.6 });
-	// 	console.log('transformSpring: ', transformSpring);
-	// 	transformSpring.set(0);
-	// }
 
 	let showOverlay: boolean = false;
 	let showRestartButton: boolean = false;
 	let isMyTurn = true;
 	$: isMyTurn = gameState.waitingFor === currentUserId;
-	// let overlayMessage = ""
 	beforeUpdate(() => {
-		// const isPlayerDisconnected = !(gameState.player1.connected && gameState.player2.connected)
-		// if (isPlayerDisconnected) {
-		// 	overlayMessage = ''
-		// 	showOverlay = true;
-		// 	console.log('showOverlay: ', showOverlay);
-		// }
 		showOverlay =
 			gameState.status === GAME_STATUS.COMPLETED ||
 			gameState.status === GAME_STATUS.PLAYER_DISCONNECTED ||

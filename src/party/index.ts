@@ -83,7 +83,6 @@ export default class Server implements Party.Server {
 				this.state.player2.id = payload.player2.id;
 				this.state.player2.name = payload.player2.name;
 			}
-			console.log('POST storage.put state: ', JSON.stringify(this.state));
 			await this.party.storage.put(storageKey, this.state);
 		}
 
@@ -171,10 +170,8 @@ export default class Server implements Party.Server {
 	}
 
 	onConnect(connection: Party.Connection, ctx: Party.ConnectionContext) {
-		console.log('onConnect conn.id: ', connection.id);
 		// Close any new connection if there's already 2 players in the room
 		const playerCount = [...this.party.getConnections()].length;
-		console.log('playerCount: ', playerCount);
 		if (playerCount > MAX_USERS_PER_ROOM) {
 			connection.send(
 				JSON.stringify({ message: 'More than 2 players in this room. Try a new game' })
@@ -269,7 +266,6 @@ export default class Server implements Party.Server {
 				this.party.broadcast(JSON.stringify(this.state));
 			}
 		}
-		console.log(this.state);
 	}
 }
 
