@@ -1,4 +1,4 @@
-import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
+import { getPartyKitRoomUrl } from '$lib/utils/party';
 import { redirect, fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { nanoid } from 'nanoid';
@@ -19,7 +19,7 @@ export const actions: Actions = {
 			},
 			slug
 		};
-		const partykitUrl = `${PUBLIC_PARTYKIT_HOST}/party/${slug}`;
+		const partykitUrl = getPartyKitRoomUrl(slug);
 		await fetch(partykitUrl, {
 			body: JSON.stringify(payload),
 			method: 'POST'

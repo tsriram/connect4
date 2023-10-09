@@ -1,13 +1,13 @@
-import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
 import type { Actions, PageServerLoad } from './$types';
 import { redirect, fail, error } from '@sveltejs/kit';
+import { getPartyKitRoomUrl } from '$lib/utils/party';
 import type { PartyData } from '$lib/types';
 import { nanoid } from 'nanoid';
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
 	const room = params.slug;
 
-	const partykitUrl = `${PUBLIC_PARTYKIT_HOST}/party/${room}`;
+	const partykitUrl = getPartyKitRoomUrl(room);
 	const partyResponse = await fetch(partykitUrl);
 	if (partyResponse.status === 200) {
 		const { playerCount, gameState }: PartyData = await partyResponse.json();
@@ -39,7 +39,7 @@ export const actions: Actions = {
 				id: player2Id
 			}
 		};
-		const partykitUrl = `${PUBLIC_PARTYKIT_HOST}/party/${slug}`;
+		const partykitUrl = getPartyKitRoomUrl(slug);
 		await fetch(partykitUrl, {
 			body: JSON.stringify(payload),
 			method: 'PUT'

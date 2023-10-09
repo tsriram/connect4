@@ -1,4 +1,4 @@
-import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
+import { getPartyKitRoomUrl } from '$lib/utils/party';
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import type { PartyData } from '$lib/types';
@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ params, fetch, cookies }) => {
 	if (!userid) {
 		throw redirect(302, `/join/${room}`);
 	}
-	const partykitUrl = `${PUBLIC_PARTYKIT_HOST}/party/${room}`;
+	const partykitUrl = getPartyKitRoomUrl(room);
 	const partyResponse = await fetch(partykitUrl);
 	const { playerCount, gameState }: PartyData = await partyResponse.json();
 	if (gameState) {
