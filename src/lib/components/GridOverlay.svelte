@@ -16,7 +16,7 @@
 <style>
 	.grid-overlay {
 		position: absolute;
-		background-color: hsl(0deg 0% 0% / 40%);
+		background-color: hsl(0deg 0% 0% / 70%);
 		top: 0;
 		left: 0;
 		right: 0;
