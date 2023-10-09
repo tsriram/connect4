@@ -1,6 +1,6 @@
 import type * as Party from 'partykit/server';
 import { MessageType, type GameState, GAME_STATUS } from '../lib/types';
-import { findConsecutiveElements, findConsecutiveNonZeroElements, updateBoard } from './game';
+import { findConsecutiveNonZeroElements, updateBoard, isBoardFull } from './game';
 
 const MAX_USERS_PER_ROOM = 2;
 const BOARD_VALUE_FOR_PLAYER1 = 1;
@@ -232,19 +232,29 @@ export default class Server implements Party.Server {
 					this.state.newCoinRow = updatedRow;
 					this.state.newCoinCol = data.colIndex;
 
-					const winningNumber = findConsecutiveNonZeroElements(this.state.board);
-					if (winningNumber === BOARD_VALUE_FOR_PLAYER1) {
+					const isTied = isBoardFull(this.state.board);
+
+					if (isTied) {
 						this.state.status = GAME_STATUS.COMPLETED;
-						this.state.message = `Yay, ${this.state.player1.name} won!`;
-					} else if (winningNumber === BOARD_VALUE_FOR_PLAYER2) {
-						this.state.status = GAME_STATUS.COMPLETED;
-						this.state.message = `Yay, ${this.state.player2.name} won!`;
+						this.state.message = `Yay, both of you have won ;-)`;
+						this.party.broadcast(JSON.stringify(this.state));
+						this.state.newCoinRow = null;
+						this.state.newCoinCol = null;
 					} else {
-						this.state.waitingFor = isPlayer1 ? this.state.player2.id : this.state.player1.id;
+						const winningNumber = findConsecutiveNonZeroElements(this.state.board);
+						if (winningNumber === BOARD_VALUE_FOR_PLAYER1) {
+							this.state.status = GAME_STATUS.COMPLETED;
+							this.state.message = `Yay, ${this.state.player1.name} won!`;
+						} else if (winningNumber === BOARD_VALUE_FOR_PLAYER2) {
+							this.state.status = GAME_STATUS.COMPLETED;
+							this.state.message = `Yay, ${this.state.player2.name} won!`;
+						} else {
+							this.state.waitingFor = isPlayer1 ? this.state.player2.id : this.state.player1.id;
+						}
+						this.party.broadcast(JSON.stringify(this.state));
+						this.state.newCoinRow = null;
+						this.state.newCoinCol = null;
 					}
-					this.party.broadcast(JSON.stringify(this.state));
-					this.state.newCoinRow = null;
-					this.state.newCoinCol = null;
 				}
 				break;
 			}
