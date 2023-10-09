@@ -47,7 +47,26 @@ export default class Server implements Party.Server {
 	}
 	state: GameState;
 
-	async onStart(): void | Promise<void> {
+	async updateConnections(type: 'connect' | 'disconnect', connection: Party.Connection) {
+		// get handle to a shared room instance of the "connections" party
+		const connectionsParty = this.party.context.parties.connections;
+		console.log('connectionsParty: ', connectionsParty);
+		const connectionsRoomId = 'active';
+		const connectionsRoom = connectionsParty.get(connectionsRoomId);
+
+		// notify room by making an HTTP POST request
+		await connectionsRoom.fetch({
+			method: 'POST',
+			body: JSON.stringify({
+				type,
+				connectionId: connection.id,
+				roomId: this.party.id
+			})
+		});
+	}
+
+	async onStart(): Promise<void> {
+		console.log('main party started');
 		const storedState = await this.party.storage.get<GameState>(storageKey);
 		if (storedState !== undefined) {
 			this.state = storedState;
@@ -55,6 +74,7 @@ export default class Server implements Party.Server {
 	}
 
 	async onRequest(request: Party.Request): Promise<Response> {
+		console.log('party onrequest');
 		const url = new URL(request.url);
 		// get `abc` from "http://127.0.0.1:1999/party/abc"
 		const slug = url.pathname.substring(url.pathname.lastIndexOf('/') + 1);
@@ -87,6 +107,7 @@ export default class Server implements Party.Server {
 		}
 
 		if (request.method === 'GET') {
+			console.log('url: ', url);
 			const storedState = await this.party.storage.get<GameState>(storageKey, {
 				noCache: true
 			});
@@ -166,10 +187,11 @@ export default class Server implements Party.Server {
 		// this.state.message = `Sorry, ${closedByPlayer} has disconnected. You can't continue this game :(`;
 		// this.state.status = GAME_STATUS.PLAYER_DISCONNECTED;
 		this.party.broadcast(JSON.stringify(this.state));
+		this.updateConnections('disconnect', connection);
 		// }
 	}
 
-	onConnect(connection: Party.Connection, ctx: Party.ConnectionContext) {
+	onConnect(connection: Party.Connection) {
 		// Close any new connection if there's already 2 players in the room
 		const playerCount = [...this.party.getConnections()].length;
 		if (playerCount > MAX_USERS_PER_ROOM) {
@@ -197,6 +219,7 @@ export default class Server implements Party.Server {
 		}
 
 		this.party.broadcast(JSON.stringify(this.state));
+		this.updateConnections('connect', connection);
 	}
 
 	onMessage(message: string, sender: Party.Connection) {
