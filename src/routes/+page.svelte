@@ -14,7 +14,7 @@
 
 <style>
 	.help-text {
-		font-size: 1rem;
+		font-size: 90%;
 		text-align: center;
 		margin-bottom: 6rem;
 	}
