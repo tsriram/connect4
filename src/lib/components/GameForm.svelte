@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { GameFormType } from '$lib/types';
-	import logo from '$lib/images/connect4-logo-light.png';
 	import Button from '$lib/components/Button.svelte';
 	export let type: GameFormType;
 
