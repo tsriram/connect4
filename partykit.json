@@ -1,5 +1,5 @@
 {
-	"name": "connect4-party",
+	"name": "connect4",
 	"main": "src/party/index.ts",
 	"parties": {
 		"analytics": "src/party/analytics.ts"
