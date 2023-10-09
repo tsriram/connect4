@@ -265,9 +265,11 @@ export default class Server implements Party.Server {
 						if (winningNumber === BOARD_VALUE_FOR_PLAYER1) {
 							this.state.status = GAME_STATUS.COMPLETED;
 							this.state.message = `Yay, ${this.state.player1.name} won!`;
+							this.state.winner = this.state.player1.id;
 						} else if (winningNumber === BOARD_VALUE_FOR_PLAYER2) {
 							this.state.status = GAME_STATUS.COMPLETED;
 							this.state.message = `Yay, ${this.state.player2.name} won!`;
+							this.state.winner = this.state.player2.id;
 						} else {
 							this.state.waitingFor = isPlayer1 ? this.state.player2.id : this.state.player1.id;
 						}

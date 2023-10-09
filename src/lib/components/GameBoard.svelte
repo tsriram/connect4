@@ -17,6 +17,7 @@
 	let showOverlay: boolean = false;
 	let showRestartButton: boolean = false;
 	let isMyTurn = true;
+	let isWinner = false;
 	$: isMyTurn = gameState.waitingFor === currentUserId;
 	beforeUpdate(() => {
 		showOverlay =
@@ -24,6 +25,7 @@
 			gameState.status === GAME_STATUS.PLAYER_DISCONNECTED ||
 			gameState.status === GAME_STATUS.WAITING_FOR_PLAYER2;
 		showRestartButton = gameState.status === GAME_STATUS.COMPLETED;
+		isWinner = gameState.winner === currentUserId;
 	});
 </script>
 
@@ -63,7 +65,7 @@
 				{/each}
 			{/each}
 			{#if showOverlay}
-				<GridOverlay message={gameState.message} {showRestartButton} {onRestart} />
+				<GridOverlay message={gameState.message} {showRestartButton} {onRestart} {isWinner} />
 			{/if}
 		</div>
 	{/if}

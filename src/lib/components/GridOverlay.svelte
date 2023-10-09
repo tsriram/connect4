@@ -1,9 +1,39 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
+	import confetti from 'canvas-confetti';
+	import { afterUpdate } from 'svelte';
 
 	export let message: string;
 	export let showRestartButton: boolean = false;
 	export let onRestart: () => void;
+	export let isWinner: boolean;
+
+	function boom() {
+		confetti({
+			particleCount: 150,
+			disableForReducedMotion: true,
+			angle: 45,
+			origin: {
+				x: 0,
+				y: 0.5
+			}
+		});
+		confetti({
+			particleCount: 150,
+			disableForReducedMotion: true,
+			angle: 135,
+			origin: {
+				x: 1,
+				y: 0.5
+			}
+		});
+	}
+
+	afterUpdate(() => {
+		if (isWinner) {
+			boom();
+		}
+	});
 </script>
 
 <div class="grid-overlay">
