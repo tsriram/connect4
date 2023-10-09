@@ -2,6 +2,6 @@
 	"name": "strike4-party",
 	"main": "src/party/index.ts",
 	"parties": {
-		"connections": "src/party/connections.ts"
+		"analytics": "src/party/analytics.ts"
 	}
 }

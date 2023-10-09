@@ -39,9 +39,9 @@ export default class Rooms implements Party.Server {
 		// send connection counts to requester
 		return new Response(
 			JSON.stringify({
-				connections: this.connections,
-				totalConnections: this.totalConnections,
-				totalRooms: Object.keys(this.connections).length
+				currentActivePlayers: this.totalConnections,
+				totalGames: Object.keys(this.connections).length,
+				games: this.connections
 			})
 		);
 	}

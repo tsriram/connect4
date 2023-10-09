@@ -49,13 +49,13 @@ export default class Server implements Party.Server {
 
 	async updateConnections(type: 'connect' | 'disconnect', connection: Party.Connection) {
 		// get handle to a shared room instance of the "connections" party
-		const connectionsParty = this.party.context.parties.connections;
-		console.log('connectionsParty: ', connectionsParty);
-		const connectionsRoomId = 'active';
-		const connectionsRoom = connectionsParty.get(connectionsRoomId);
+		const analyticsParty = this.party.context.parties.connections;
+		console.log('connectionsParty: ', analyticsParty);
+		const gameRoomId = 'connect4';
+		const gamesAnalyticsRoom = analyticsParty.get(gameRoomId);
 
 		// notify room by making an HTTP POST request
-		await connectionsRoom.fetch({
+		await gamesAnalyticsRoom.fetch({
 			method: 'POST',
 			body: JSON.stringify({
 				type,
