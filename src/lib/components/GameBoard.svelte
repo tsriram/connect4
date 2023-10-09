@@ -3,7 +3,7 @@
 	import { GAME_STATUS, type GameState } from '$lib/types';
 	import { beforeUpdate } from 'svelte';
 
-	import { spring } from 'svelte/motion';
+	import type { Spring } from 'svelte/motion';
 
 	export let gameState: GameState;
 	export let socketDisconnected = false;
@@ -12,8 +12,16 @@
 	export let handleClick: (colIndex: number) => void;
 	export let onRestart: () => void;
 
-	// let transformSpring;
+	export let transformSpring: Spring<number>;
 	// let transformSpring = spring(80, { stiffness: 0.1, damping: 0.6 });
+	// if (gameState.newCoinCol !== null && gameState.newCoinRow !== null) {
+	// 	// get the row to which the new coin was added
+	// 	const position = (gameState.newCoinRow + 1) * (80 + 16) * -1;
+	// 	console.log('position: ', position);
+	// 	transformSpring = spring(position, { stiffness: 0.1, damping: 0.6 });
+	// 	console.log('transformSpring: ', transformSpring);
+	// 	transformSpring.set(0);
+	// }
 
 	let showOverlay: boolean = false;
 	let showRestartButton: boolean = false;
@@ -53,15 +61,15 @@
 							<!-- {`${rowIndex}, ${colIndex} - ${col}`} -->
 							{#if col === 1}
 								{#if rowIndex === gameState.newCoinRow && colIndex === gameState.newCoinCol}
-									<!-- <span class="coin player1" style="transform: translateY({$transformSpring}px);" /> -->
-									<span class="coin player1" />
+									<span class="coin player1" style="transform: translateY({$transformSpring}px);" />
+									<!-- <span class="coin player1" /> -->
 								{:else}
 									<span class="coin player1" />
 								{/if}
 							{:else if col === 2}
 								{#if rowIndex === gameState.newCoinRow && colIndex === gameState.newCoinCol}
-									<!-- <span class="coin player2" style="transform: translateY({$transformSpring}px);" /> -->
-									<span class="coin player2" />
+									<span class="coin player2" style="transform: translateY({$transformSpring}px);" />
+									<!-- <span class="coin player2" /> -->
 								{:else}
 									<span class="coin player2" />
 								{/if}
@@ -79,17 +87,40 @@
 
 <style>
 	.grid {
+		--column-gap: 12px;
+		--row-gap: 20px;
+		--grid-padding: 16px;
+		--column-size: 40px;
 		display: grid;
-		padding: 32px;
+		padding: var(--grid-padding);
 		width: fit-content;
-		row-gap: 20px;
-		column-gap: 16px;
+		row-gap: var(--row-gap);
+		column-gap: var(--column-gap);
 		background-color: var(--board-bg-color);
 		grid-template-rows: repeat(6, 1fr);
-		grid-template-columns: repeat(7, 80px);
+		grid-template-columns: repeat(7, var(--column-size));
 		position: relative;
 		box-shadow: 0px 0px 4px 4px var(--grid-border-color);
 		border-radius: 8px;
+	}
+	@media (min-width: 720px) {
+		.grid {
+			--column-gap: 16px;
+			--row-gap: 20px;
+			--grid-padding: 32px;
+			--column-size: 80px;
+			/* display: grid;
+			padding: var(--grid-padding);
+			width: fit-content;
+			row-gap: var(--row-gap);
+			column-gap: var(--column-gap);
+			background-color: var(--board-bg-color);
+			grid-template-rows: repeat(6, 1fr);
+			grid-template-columns: repeat(7, var(--column-size));
+			position: relative;
+			box-shadow: 0px 0px 4px 4px var(--grid-border-color);
+			border-radius: 8px; */
+		}
 	}
 	.cell-button {
 		padding: 0;
@@ -100,8 +131,8 @@
 	}
 	.cell {
 		background-color: var(--cell-bg-color);
-		height: 80px;
-		width: 80px;
+		height: var(--column-size);
+		width: var(--column-size);
 		border-radius: 50%;
 		display: flex;
 		align-items: center;
@@ -113,9 +144,17 @@
 	.coin.player2 {
 		background-color: var(--player2-color);
 	}
+	/* @keyframes fall-animation {
+		from {
+			transform: translateY(-300px);
+		}
+		to {
+			transform: translateY(0);
+		}
+	} */
 	.coin {
-		height: 80px;
-		width: 80px;
+		height: var(--column-size);
+		width: var(--column-size);
 		border-radius: 50%;
 		background-color: hotpink;
 		position: absolute;

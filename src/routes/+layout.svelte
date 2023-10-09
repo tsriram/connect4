@@ -27,6 +27,7 @@
 		display: flex;
 		flex: 1;
 		margin: auto;
+		padding: 0 2rem;
 	}
 	footer {
 		display: flex;

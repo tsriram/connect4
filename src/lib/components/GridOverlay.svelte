@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Button from '$lib/components/Button.svelte';
+
 	export let message: string;
 	export let showRestartButton: boolean = false;
 	export let onRestart: () => void;
@@ -7,7 +9,7 @@
 <div class="grid-overlay">
 	<h2>{message}</h2>
 	{#if showRestartButton}
-		<button on:click={onRestart}>Restart game</button>
+		<Button onClick={onRestart}>Restart game</Button>
 	{/if}
 </div>
 

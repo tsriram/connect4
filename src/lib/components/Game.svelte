@@ -1,10 +1,11 @@
 <script lang="ts">
 	import GameBoard from '$lib/components/GameBoard.svelte';
 	import GameHeader from '$lib/components/GameHeader.svelte';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { MessageType, type GameState, type SlugData, GAME_STATUS } from '$lib/types';
 	import PartySocket from 'partysocket';
 	import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
+	import { spring, type Spring } from 'svelte/motion';
 
 	export let gameState: GameState;
 	export let room: string;
@@ -12,6 +13,22 @@
 
 	let socket: PartySocket;
 	let socketDisconnected = false;
+	let transformSpring: Spring<number>;
+	// default to 80px (desktop size)
+	let rowSize = 80;
+	let rowGap = 20;
+	onMount(() => {
+		try {
+			const grid = document.querySelector('.grid');
+			if (grid) {
+				rowSize = parseInt(getComputedStyle(grid).getPropertyValue('--column-size'));
+				rowGap = parseInt(getComputedStyle(grid).getPropertyValue('--row-gap'));
+			}
+		} catch {
+			console.error('Error setting row size');
+		}
+		console.log('onMount rowSize: ', rowSize);
+	});
 
 	function restartGame() {
 		console.log('restarting game');
@@ -27,14 +44,14 @@
 		console.log('onMessage socket.id: ', socket.id);
 		gameState = JSON.parse(event.data);
 
-		// if (gameState.newCoinCol !== null && gameState.newCoinRow !== null) {
-		// 	// get the row to which the new coin was added
-		// 	const position = (gameState.newCoinRow + 1) * (80 + 16) * -1;
-		// 	console.log('position: ', position);
-		// 	transformSpring = spring(position, { stiffness: 0.1, damping: 0.6 });
-		// 	console.log('transformSpring: ', transformSpring);
-		// 	transformSpring.set(0);
-		// }
+		if (gameState.newCoinCol !== null && gameState.newCoinRow !== null) {
+			// get the row to which the new coin was added
+			const position = (gameState.newCoinRow + 1) * (rowSize + rowGap) * -1;
+			console.log('position: ', position);
+			transformSpring = spring(position, { stiffness: 0.1, damping: 0.6 });
+			console.log('transformSpring: ', transformSpring);
+			transformSpring.set(0);
+		}
 	}
 
 	function onClose(event: CloseEvent) {
@@ -99,6 +116,7 @@
 		{handleClick}
 		currentUserId={socket.id}
 		onRestart={restartGame}
+		{transformSpring}
 	/>
 	<!-- <GameTurnIndicator /> -->
 </div>

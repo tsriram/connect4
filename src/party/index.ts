@@ -243,6 +243,8 @@ export default class Server implements Party.Server {
 						this.state.waitingFor = isPlayer1 ? this.state.player2.id : this.state.player1.id;
 					}
 					this.party.broadcast(JSON.stringify(this.state));
+					this.state.newCoinRow = null;
+					this.state.newCoinCol = null;
 				}
 				break;
 			}
