@@ -29,6 +29,7 @@ html.dark {
 	--board-bg-color: #3d5566;
 	--button-bg-color: #1b2836;
 	--button-text-color: #fff;
+	--footer-link-color: hotpink;
 }
 
 html.light {
@@ -42,4 +43,5 @@ html.light {
 	--board-bg-color: #2563eb;
 	--button-bg-color: #f1f5f9;
 	--button-text-color: #1b2836;
+	--footer-link-color: #4338ca;
 }

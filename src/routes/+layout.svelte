@@ -3,6 +3,7 @@
 	import ThemeSelector from '$lib/components/ThemeSelector.svelte';
 	import Logo from '$lib/components/Logo.svelte';
 	import '../styles/global.css';
+	import Footer from '$lib/components/Footer.svelte';
 </script>
 
 <InitialThemeSetter />
@@ -18,7 +19,7 @@
 	<section class="middle">
 		<slot />
 	</section>
-	<footer>&copy; Sriram</footer>
+	<Footer />
 </div>
 
 <style>
