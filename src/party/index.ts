@@ -168,7 +168,7 @@ export default class Server implements Party.Server {
 		return initialState;
 	}
 
-	onClose(connection: Party.Connection): void | Promise<void> {
+	async onClose(connection: Party.Connection): Promise<void> {
 		// const playerCount = [...this.party.getConnections()].length;
 		// if (playerCount === 0) {
 		// 	this.resetState();
@@ -185,14 +185,16 @@ export default class Server implements Party.Server {
 		// const closedByPlayer = didPlayer1Close ? this.state.player1.name : this.state.player2.name;
 		// this.state.message = `Sorry, ${closedByPlayer} has disconnected. You can't continue this game :(`;
 		// this.state.status = GAME_STATUS.PLAYER_DISCONNECTED;
+		await this.party.storage.put(storageKey, this.state);
 		this.party.broadcast(JSON.stringify(this.state));
 		this.updateConnections('disconnect', connection);
 		// }
 	}
 
-	onConnect(connection: Party.Connection) {
+	async onConnect(connection: Party.Connection) {
 		// Close any new connection if there's already 2 players in the room
 		const playerCount = [...this.party.getConnections()].length;
+		console.log('playerCount: ', playerCount);
 		if (playerCount > MAX_USERS_PER_ROOM) {
 			connection.send(
 				JSON.stringify({ message: 'More than 2 players in this room. Try a new game' })
@@ -218,10 +220,11 @@ export default class Server implements Party.Server {
 		}
 
 		this.party.broadcast(JSON.stringify(this.state));
+		await this.party.storage.put(storageKey, this.state);
 		this.updateConnections('connect', connection);
 	}
 
-	onMessage(message: string, sender: Party.Connection) {
+	async onMessage(message: string, sender: Party.Connection) {
 		const data = JSON.parse(message);
 
 		switch (data.type) {
@@ -290,6 +293,7 @@ export default class Server implements Party.Server {
 				this.party.broadcast(JSON.stringify(this.state));
 			}
 		}
+		await this.party.storage.put(storageKey, this.state);
 	}
 }
 

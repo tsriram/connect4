@@ -23,7 +23,8 @@
 		showOverlay =
 			gameState.status === GAME_STATUS.COMPLETED ||
 			gameState.status === GAME_STATUS.PLAYER_DISCONNECTED ||
-			gameState.status === GAME_STATUS.WAITING_FOR_PLAYER2;
+			gameState.status === GAME_STATUS.WAITING_FOR_PLAYER2 ||
+			socketDisconnected;
 		showRestartButton = gameState.status === GAME_STATUS.COMPLETED;
 		isWinner = gameState.winner === currentUserId;
 	});

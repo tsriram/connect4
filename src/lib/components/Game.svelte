@@ -52,6 +52,10 @@
 		socketDisconnected = true;
 	}
 
+	function onOpen() {
+		socketDisconnected = false;
+	}
+
 	function startGame() {
 		// gameState = gameState;
 		socket = new PartySocket({
@@ -63,12 +67,15 @@
 		socket.addEventListener('message', onMessage);
 
 		socket.addEventListener('close', onClose);
+
+		socket.addEventListener('open', onOpen);
 	}
 
 	onDestroy(() => {
 		if (socket) {
 			socket.removeEventListener('message', onMessage);
 			socket.removeEventListener('close', onClose);
+			socket.removeEventListener('open', onOpen);
 		}
 	});
 
