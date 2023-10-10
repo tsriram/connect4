@@ -6,6 +6,7 @@
 	import PartySocket from 'partysocket';
 	import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
 	import { spring, type Spring } from 'svelte/motion';
+	import ShareGameInfobox from '$lib/components/ShareGameInfobox.svelte';
 
 	export let gameState: GameState;
 	export let room: string;
@@ -97,6 +98,9 @@
 		player2={gameState.player2}
 		turn={gameState.waitingFor || '???'}
 	/>
+	{#if gameState.status === GAME_STATUS.WAITING_FOR_PLAYER2}
+		<ShareGameInfobox />
+	{/if}
 	<GameBoard
 		{gameState}
 		{socketDisconnected}
@@ -105,5 +109,4 @@
 		onRestart={restartGame}
 		{transformSpring}
 	/>
-	<!-- <GameTurnIndicator /> -->
 </div>

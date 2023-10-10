@@ -15,7 +15,6 @@
 	export let transformSpring: Spring<number>;
 
 	let showOverlay: boolean = false;
-	let showRestartButton: boolean = false;
 	let isMyTurn = true;
 	let isWinner = false;
 	$: isMyTurn = gameState.waitingFor === currentUserId;
@@ -25,7 +24,6 @@
 			gameState.status === GAME_STATUS.PLAYER_DISCONNECTED ||
 			gameState.status === GAME_STATUS.WAITING_FOR_PLAYER2 ||
 			socketDisconnected;
-		showRestartButton = gameState.status === GAME_STATUS.COMPLETED;
 		isWinner = gameState.winner === currentUserId;
 	});
 </script>
@@ -68,10 +66,9 @@
 			{#if showOverlay}
 				<GridOverlay
 					message={gameState.message}
-					{showRestartButton}
 					{onRestart}
 					{isWinner}
-					showStartNewGame={gameState.status === GAME_STATUS.PLAYER_DISCONNECTED}
+					gameStatus={gameState.status}
 				/>
 			{/if}
 		</div>

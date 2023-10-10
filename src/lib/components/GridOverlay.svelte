@@ -1,13 +1,21 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
+	import { GAME_STATUS } from '$lib/types';
 	import confetti from 'canvas-confetti';
-	import { afterUpdate } from 'svelte';
+	import { afterUpdate, beforeUpdate } from 'svelte';
+
+	let showRestartButton: boolean = false;
+	let showStartNewGame: boolean = false;
 
 	export let message: string;
-	export let showRestartButton: boolean = false;
 	export let onRestart: () => void;
 	export let isWinner: boolean;
-	export let showStartNewGame: boolean = false;
+	export let gameStatus: GAME_STATUS;
+
+	beforeUpdate(() => {
+		showRestartButton = gameStatus === GAME_STATUS.COMPLETED;
+		showStartNewGame = gameStatus === GAME_STATUS.PLAYER_DISCONNECTED;
+	});
 
 	function boom() {
 		confetti({
