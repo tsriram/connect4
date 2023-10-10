@@ -1,8 +1,7 @@
 <script lang="ts">
-	export let onClick: (Event) => void;
 </script>
 
-<button class="btn" {...$$props} on:click={onClick}>
+<button class="btn" on:click>
 	<slot />
 </button>
 

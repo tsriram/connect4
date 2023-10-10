@@ -40,7 +40,7 @@
 <div class="grid-overlay">
 	<h2>{message}</h2>
 	{#if showRestartButton}
-		<Button onClick={onRestart}>Restart game</Button>
+		<Button on:click={onRestart}>Restart game</Button>
 	{/if}
 	{#if showStartNewGame}
 		<a href="/" class="start-game">Or start a new game?</a>

@@ -2,10 +2,15 @@
 	import { enhance } from '$app/forms';
 	import { GameFormType } from '$lib/types';
 	import Button from '$lib/components/Button.svelte';
+	import { onMount } from 'svelte';
+	import { getItem, setItem } from '$lib/utils/storage';
 	export let type: GameFormType;
+
+	const nameStorageKey = 'connect4:username';
 
 	const newGameAction = '?/new';
 	const joinGameAction = '?/join';
+	let storedUserName: string;
 	const formAction = type === GameFormType.START ? newGameAction : joinGameAction;
 	const buttonLabel = type === GameFormType.START ? 'Start a new game' : 'Join game';
 	let submitting = false;
@@ -15,6 +20,10 @@
 			submittingLabel = type === GameFormType.START ? 'Starting a new game...' : 'Joining game...';
 		}
 	}
+
+	onMount(() => {
+		storedUserName = getItem(nameStorageKey) || '';
+	});
 </script>
 
 <div class="container">
@@ -28,6 +37,7 @@
 			method="post"
 			use:enhance={() => {
 				submitting = true;
+				setItem(nameStorageKey, storedUserName);
 				return async ({ update }) => {
 					update();
 					submitting = false;
@@ -43,10 +53,10 @@
 				autofocus
 				required
 				aria-required="true"
+				bind:value={storedUserName}
 			/>
 
-			<!-- <button class="submit-btn" type="submit">{submitting ? submittingLabel : buttonLabel}</button> -->
-			<Button type="submit">{submitting ? submittingLabel : buttonLabel}</Button>
+			<Button>{submitting ? submittingLabel : buttonLabel}</Button>
 		</form>
 	</div>
 </div>
