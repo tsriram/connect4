@@ -7,6 +7,7 @@
 	export let showRestartButton: boolean = false;
 	export let onRestart: () => void;
 	export let isWinner: boolean;
+	export let showStartNewGame: boolean = false;
 
 	function boom() {
 		confetti({
@@ -41,6 +42,9 @@
 	{#if showRestartButton}
 		<Button onClick={onRestart}>Restart game</Button>
 	{/if}
+	{#if showStartNewGame}
+		<a href="/" class="start-game">Or start a new game?</a>
+	{/if}
 </div>
 
 <style>
@@ -56,5 +60,10 @@
 		align-items: center;
 		justify-content: center;
 		color: #fff;
+	}
+	.start-game {
+		margin-top: 2rem;
+		color: #fff;
+		font-size: 1.25rem;
 	}
 </style>

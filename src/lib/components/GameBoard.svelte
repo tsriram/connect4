@@ -66,7 +66,13 @@
 				{/each}
 			{/each}
 			{#if showOverlay}
-				<GridOverlay message={gameState.message} {showRestartButton} {onRestart} {isWinner} />
+				<GridOverlay
+					message={gameState.message}
+					{showRestartButton}
+					{onRestart}
+					{isWinner}
+					showStartNewGame={gameState.status === GAME_STATUS.PLAYER_DISCONNECTED}
+				/>
 			{/if}
 		</div>
 	{/if}
