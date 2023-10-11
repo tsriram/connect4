@@ -46,6 +46,7 @@
 	.logo-container {
 		/* for visual alignment */
 		margin-left: -12px;
+		flex: 1;
 	}
 	.theme-selector-container {
 		/* for visual alignment */
