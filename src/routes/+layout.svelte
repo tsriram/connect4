@@ -5,9 +5,11 @@
 	import '../styles/global.css';
 	import Footer from '$lib/components/Footer.svelte';
 	import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte';
+	import MetaTags from '$lib/components/MetaTags.svelte';
 </script>
 
 <InitialThemeSetter />
+<MetaTags />
 <div class="wrapper">
 	<header class="header">
 		<div class="logo-container">
