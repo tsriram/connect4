@@ -19,7 +19,8 @@
 </script>
 
 <div class="game-turn">
-	Current turn: {turnPlayerName}
+	<span class="label">Current turn:</span>
+	{turnPlayerName}
 	<!-- {#if turnPlayerName !== undefined}
 		<HeaderCoin player={turnPlayer} />
 	{/if} -->
@@ -30,5 +31,9 @@
 		display: flex;
 		align-items: center;
 		/* margin-right: -16px; */
+	}
+	.label {
+		opacity: 80%;
+		margin-right: 1rem;
 	}
 </style>

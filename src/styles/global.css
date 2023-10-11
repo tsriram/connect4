@@ -24,7 +24,9 @@ html.dark {
 	--grid-border-color: #3d5566;
 	--cell-bg-color: #243447;
 	--player1-color: #fde047;
+	--player1-border-color: #eab308;
 	--player2-color: #ef4444;
+	--player2-border-color: #b91c1c;
 	--logo-url: url('/images/connect4-logo-dark.png');
 	--board-bg-color: #3d5566;
 	--button-bg-color: #1b2836;
@@ -40,7 +42,9 @@ html.light {
 	--grid-border-color: #655e56;
 	--cell-bg-color: #f1f5f9;
 	--player1-color: #fde047;
+	--player1-border-color: #eab308;
 	--player2-color: #ef4444;
+	--player2-border-color: #b91c1c;
 	--logo-url: url('/images/connect4-logo-light.png');
 	--board-bg-color: #2563eb;
 	--button-bg-color: #f1f5f9;

@@ -99,17 +99,6 @@
 			--row-gap: 20px;
 			--grid-padding: 32px;
 			--column-size: 80px;
-			/* display: grid;
-			padding: var(--grid-padding);
-			width: fit-content;
-			row-gap: var(--row-gap);
-			column-gap: var(--column-gap);
-			background-color: var(--board-bg-color);
-			grid-template-rows: repeat(6, 1fr);
-			grid-template-columns: repeat(7, var(--column-size));
-			position: relative;
-			box-shadow: 0px 0px 4px 4px var(--grid-border-color);
-			border-radius: 8px; */
 		}
 	}
 	.cell-button {
@@ -130,28 +119,44 @@
 	}
 	.coin.player1 {
 		background-color: var(--player1-color);
+		border-color: var(--player1-border-color);
+		background-image: conic-gradient(
+			var(--player1-color),
+			var(--player1-border-color),
+			var(--player1-color),
+			var(--player1-border-color),
+			var(--player1-color),
+			var(--player1-border-color),
+			var(--player1-color),
+			var(--player1-border-color),
+			var(--player1-color),
+			var(--player1-border-color),
+			var(--player1-color)
+		);
 	}
 	.coin.player2 {
 		background-color: var(--player2-color);
+		border-color: var(--player2-border-color);
+		background-image: conic-gradient(
+			var(--player2-color),
+			var(--player2-border-color),
+			var(--player2-color),
+			var(--player2-border-color),
+			var(--player2-color),
+			var(--player2-border-color),
+			var(--player2-color),
+			var(--player2-border-color),
+			var(--player2-color),
+			var(--player2-border-color),
+			var(--player2-color)
+		);
 	}
-	/* @keyframes fall-animation {
-		from {
-			transform: translateY(-300px);
-		}
-		to {
-			transform: translateY(0);
-		}
-	} */
 	.coin {
 		height: var(--column-size);
 		width: var(--column-size);
 		border-radius: 50%;
-		background-color: hotpink;
 		position: absolute;
 		display: inline-block;
-		/* animation-name: fall-animation;
-		animation-duration: 400ms;
-		animation-timing-function: ease-in-out; */
-		border: 2px dashed;
+		border: 4px solid;
 	}
 </style>
