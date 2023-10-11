@@ -1,7 +1,12 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+	let url = '';
+
+	if (browser) {
+		url = window.location.toString();
+	}
 	function onCopyClick() {
-		let copyText = window?.location.toString() || '';
-		navigator.clipboard.writeText(copyText).catch(function (err) {
+		navigator.clipboard.writeText(url).catch(function (err) {
 			console.error('Unable to copy text: ', err);
 		});
 	}
@@ -10,7 +15,7 @@
 <div class="info-container">
 	<h4>Share this link with your friend to start playing:</h4>
 	<p class="info">
-		<span class="url">{window?.location}</span>
+		<span class="url">{url}</span>
 		<button class="copy" on:click={onCopyClick}>Copy</button>
 	</p>
 </div>
