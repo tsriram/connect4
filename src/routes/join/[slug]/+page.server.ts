@@ -28,7 +28,8 @@ export const actions: Actions = {
 	join: async ({ request, params, cookies }) => {
 		const slug = params.slug;
 		const data = await request.formData();
-		const username = data.get('username');
+		const submittedUserName = data.get('username') as string;
+		const username = submittedUserName.trim();
 		if (!username) {
 			return fail(400, { username, missing: true });
 		}
@@ -46,6 +47,9 @@ export const actions: Actions = {
 		});
 		cookies.set('userid', player2Id, {
 			path: `/game/${slug}`
+		});
+		cookies.set('username', username, {
+			path: '/'
 		});
 		throw redirect(302, `/game/${slug}`);
 	}

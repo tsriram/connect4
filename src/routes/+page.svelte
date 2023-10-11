@@ -1,7 +1,10 @@
-<script>
+<script lang="ts">
 	import DocumentTitle from '$lib/components/DocumentTitle.svelte';
 	import GameForm from '$lib/components/GameForm.svelte';
+	import type { PageServerData } from './$types';
 	import { GameFormType } from '$lib/types';
+
+	export let data: PageServerData;
 </script>
 
 <DocumentTitle title="Home" />
@@ -11,7 +14,7 @@
 			>What's Connect 4?</a
 		>
 	</p>
-	<GameForm type={GameFormType.START} />
+	<GameForm type={GameFormType.START} storedUserName={data.username} />
 </div>
 
 <style>

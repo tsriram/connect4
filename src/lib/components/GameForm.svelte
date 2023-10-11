@@ -1,18 +1,13 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { GameFormType } from '$lib/types';
 	import Button from '$lib/components/Button.svelte';
-	import { onMount } from 'svelte';
-	import { getItem, setItem } from '$lib/utils/storage';
-	import { browser } from '$app/environment';
 	import { trackGameEvent } from '$lib/analytics';
+	import { GameFormType } from '$lib/types';
+	import { enhance } from '$app/forms';
 	export let type: GameFormType;
-
-	const nameStorageKey = 'connect4:username';
 
 	const newGameAction = '?/new';
 	const joinGameAction = '?/join';
-	let storedUserName: string;
+	export let storedUserName: string = '';
 	const formAction = type === GameFormType.START ? newGameAction : joinGameAction;
 	const buttonLabel = type === GameFormType.START ? 'Start a new game' : 'Join game';
 	let submitting = false;
@@ -22,10 +17,6 @@
 			submittingLabel = type === GameFormType.START ? 'Starting a new game...' : 'Joining game...';
 		}
 	}
-
-	onMount(() => {
-		storedUserName = getItem(nameStorageKey) || '';
-	});
 </script>
 
 <div class="container">
@@ -35,7 +26,6 @@
 		method="post"
 		use:enhance={() => {
 			submitting = true;
-			setItem(nameStorageKey, storedUserName);
 			trackGameEvent(type);
 			return async ({ update }) => {
 				update();
