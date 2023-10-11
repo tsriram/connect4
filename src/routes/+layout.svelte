@@ -10,6 +10,10 @@
 
 <InitialThemeSetter />
 <MetaTags />
+<div class="small-screen">
+	<p>Screen size not supported :(</p>
+	<p>Please use a larger screen to play.</p>
+</div>
 <div class="wrapper">
 	<header class="header">
 		<div class="logo-container">
@@ -27,6 +31,9 @@
 </div>
 
 <style>
+	.small-screen {
+		display: none;
+	}
 	.wrapper {
 		display: flex;
 		flex-direction: column;
@@ -35,6 +42,18 @@
 		max-width: 784px;
 		margin: auto;
 		padding: 0 2rem;
+	}
+	@media (max-width: 359px) {
+		.wrapper {
+			display: none;
+		}
+		.small-screen {
+			display: flex;
+			flex-direction: column;
+			margin-top: 4rem;
+			align-items: center;
+			justify-content: center;
+		}
 	}
 	.header {
 		margin: 2rem 0;

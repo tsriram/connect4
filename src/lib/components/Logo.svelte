@@ -274,7 +274,7 @@
 
 <style>
 	.logo {
-		max-width: 70%;
+		max-width: max(50%, 240px);
 	}
 	@media (min-width: 720px) {
 		.logo {

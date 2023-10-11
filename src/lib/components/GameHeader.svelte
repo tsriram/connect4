@@ -16,8 +16,17 @@
 <style>
 	.game-header {
 		display: flex;
-		justify-content: space-between;
+		flex-direction: column;
+		gap: 2rem;
+		align-items: center;
 		margin: 2rem 0;
 		font-size: 1.5rem;
+	}
+	@media (min-width: 720px) {
+		.game-header {
+			flex-direction: row;
+			justify-content: space-between;
+			gap: revert;
+		}
 	}
 </style>

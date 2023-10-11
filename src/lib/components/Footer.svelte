@@ -1,5 +1,5 @@
 <footer>
-	Built with&nbsp;<a href="https://kit.svelte.dev/" rel="noopener" target="_blank">SvelteKit</a
+	Built&nbsp;with&nbsp;<a href="https://kit.svelte.dev/" rel="noopener" target="_blank">SvelteKit</a
 	>&nbsp;and&nbsp;
 	<a href="https://www.partykit.io/" rel="noopener" target="_blank">PartyKit</a>&nbsp;by&nbsp;<a
 		href="https://twitter.com/tsriram"

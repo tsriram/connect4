@@ -80,7 +80,7 @@
 		--column-gap: 12px;
 		--row-gap: 20px;
 		--grid-padding: 16px;
-		--column-size: 40px;
+		--column-size: 32px;
 		display: grid;
 		padding: var(--grid-padding);
 		width: fit-content;
