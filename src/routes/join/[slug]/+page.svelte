@@ -1,9 +1,11 @@
 <script>
+	import DocumentTitle from '$lib/components/DocumentTitle.svelte';
 	import GameForm from '$lib/components/GameForm.svelte';
 	import { GameFormType } from '$lib/types';
 	export let data;
 </script>
 
+<DocumentTitle title="Join game" />
 <div>
 	{#if data.player1Name}
 		<p class="invite-text">

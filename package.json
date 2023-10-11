@@ -22,6 +22,7 @@
 		"@sveltejs/adapter-cloudflare": "^2.3.3",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/canvas-confetti": "^1.6.1",
+		"@types/gtag.js": "^0.0.16",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"eslint": "^8.28.0",

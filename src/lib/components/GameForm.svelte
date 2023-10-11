@@ -4,6 +4,8 @@
 	import Button from '$lib/components/Button.svelte';
 	import { onMount } from 'svelte';
 	import { getItem, setItem } from '$lib/utils/storage';
+	import { browser } from '$app/environment';
+	import { trackGameEvent } from '$lib/analytics';
 	export let type: GameFormType;
 
 	const nameStorageKey = 'connect4:username';
@@ -27,38 +29,34 @@
 </script>
 
 <div class="container">
-	<!-- <header>
-		<img class="logo" src={logo} alt="logo" />
-	</header> -->
-	<div class="container">
-		<form
-			class="game-form"
-			action={formAction}
-			method="post"
-			use:enhance={() => {
-				submitting = true;
-				setItem(nameStorageKey, storedUserName);
-				return async ({ update }) => {
-					update();
-					submitting = false;
-				};
-			}}
-		>
-			<label for="username">Enter your name: </label>
-			<!-- svelte-ignore a11y-autofocus -->
-			<input
-				class="username-input"
-				id="username"
-				name="username"
-				autofocus
-				required
-				aria-required="true"
-				bind:value={storedUserName}
-			/>
+	<form
+		class="game-form"
+		action={formAction}
+		method="post"
+		use:enhance={() => {
+			submitting = true;
+			setItem(nameStorageKey, storedUserName);
+			trackGameEvent(type);
+			return async ({ update }) => {
+				update();
+				submitting = false;
+			};
+		}}
+	>
+		<label for="username">Enter your name: </label>
+		<!-- svelte-ignore a11y-autofocus -->
+		<input
+			class="username-input"
+			id="username"
+			name="username"
+			autofocus
+			required
+			aria-required="true"
+			bind:value={storedUserName}
+		/>
 
-			<Button>{submitting ? submittingLabel : buttonLabel}</Button>
-		</form>
-	</div>
+		<Button>{submitting ? submittingLabel : buttonLabel}</Button>
+	</form>
 </div>
 
 <style>

@@ -1,8 +1,10 @@
 <script>
+	import DocumentTitle from '$lib/components/DocumentTitle.svelte';
 	import GameForm from '$lib/components/GameForm.svelte';
 	import { GameFormType } from '$lib/types';
 </script>
 
+<DocumentTitle title="Home" />
 <div>
 	<p class="help-text">
 		<a href="https://en.wikipedia.org/wiki/Connect_Four" rel="noopener" target="_blank"

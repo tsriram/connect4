@@ -4,6 +4,7 @@
 	import Logo from '$lib/components/Logo.svelte';
 	import '../styles/global.css';
 	import Footer from '$lib/components/Footer.svelte';
+	import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte';
 </script>
 
 <InitialThemeSetter />
@@ -20,6 +21,7 @@
 		<slot />
 	</section>
 	<Footer />
+	<GoogleAnalytics />
 </div>
 
 <style>

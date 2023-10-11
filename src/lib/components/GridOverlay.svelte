@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { trackGameCompletion } from '$lib/analytics';
 	import Button from '$lib/components/Button.svelte';
 	import { GAME_STATUS } from '$lib/types';
 	import confetti from 'canvas-confetti';
@@ -41,6 +42,7 @@
 	afterUpdate(() => {
 		if (isWinner) {
 			boom();
+			trackGameCompletion();
 		}
 	});
 </script>

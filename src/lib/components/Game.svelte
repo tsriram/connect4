@@ -7,6 +7,7 @@
 	import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
 	import { spring, type Spring } from 'svelte/motion';
 	import ShareGameInfobox from '$lib/components/ShareGameInfobox.svelte';
+	import { trackGameRestart } from '$lib/analytics';
 
 	export let gameState: GameState;
 	export let room: string;
@@ -36,6 +37,7 @@
 				type: MessageType.RESTART
 			})
 		);
+		trackGameRestart();
 	}
 
 	function onMessage(event: MessageEvent) {
