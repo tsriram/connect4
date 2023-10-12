@@ -19,6 +19,7 @@ export function updateBoard(
 }
 
 /*
+(test party deploy GH action)
 Example:
 const board = [
 	[0, 0, 0, 1, 0, 0, 0],
