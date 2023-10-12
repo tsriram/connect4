@@ -24,9 +24,7 @@
 			const grid = document.querySelector('.grid');
 			if (grid) {
 				rowSize = parseInt(getComputedStyle(grid).getPropertyValue('--column-size'));
-				console.log('rowSize: ', rowSize);
 				rowGap = parseInt(getComputedStyle(grid).getPropertyValue('--row-gap'));
-				console.log('rowGap: ', rowGap);
 			}
 		} catch {
 			console.error('Error setting row size');
@@ -48,7 +46,6 @@
 		if (gameState.newCoinCol !== null && gameState.newCoinRow !== null) {
 			// get the row to which the new coin was added
 			const position = (gameState.newCoinRow + 1) * (rowSize + rowGap) * -1;
-			console.log('position: ', position);
 			transformSpring = spring(position, { stiffness: 0.1, damping: 0.6 });
 			transformSpring.set(0);
 		}
