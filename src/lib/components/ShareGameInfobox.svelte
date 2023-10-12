@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { trackShare } from '$lib/analytics';
+	import Button from '$lib/components/Button.svelte';
 	let url = '';
+	const showShareButton = Boolean(navigator.share);
 
 	if (browser) {
 		url = window.location.toString();
@@ -10,14 +13,33 @@
 			console.error('Unable to copy text: ', err);
 		});
 	}
+
+	function share() {
+		if (navigator.share) {
+			navigator
+				.share({
+					title: 'Connect 4',
+					text: `Hey! Let's play Connect 4 online?`,
+					url: window.location.toString()
+				})
+				.then(trackShare)
+				.catch((error) => console.log('Error sharing', error));
+		} else {
+			console.log('NO SHARE');
+		}
+	}
 </script>
 
 <div class="info-container">
-	<h4>Share this link with your friend to start playing:</h4>
-	<p class="info">
-		<span class="url">{url}</span>
-		<button class="copy-btn" on:click={onCopyClick}>Copy</button>
-	</p>
+	{#if showShareButton}
+		<Button on:click={share}>Invite a fried to play!</Button>
+	{:else}
+		<h4>Share this link with your friend to start playing:</h4>
+		<p class="info">
+			<span class="url">{url}</span>
+			<button class="copy-btn" on:click={onCopyClick}>Copy</button>
+		</p>
+	{/if}
 </div>
 
 <style>
