@@ -31,6 +31,7 @@
 		display: flex;
 		align-items: center;
 		/* margin-right: -16px; */
+		align-self: flex-start;
 	}
 	.label {
 		opacity: 80%;
