@@ -9,7 +9,7 @@
 <div>
 	{#if data.player1Name}
 		<p class="invite-text">
-			Yay! {data.player1Name} has invited you to play Connect 4.
+			Hello! {data.player1Name} has invited you to play Connect 4.
 		</p>
 	{/if}
 	<GameForm type={GameFormType.JOIN} />
