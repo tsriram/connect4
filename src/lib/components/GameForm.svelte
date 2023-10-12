@@ -29,7 +29,6 @@
 			trackGameEvent(type);
 			return async ({ update }) => {
 				update();
-				submitting = false;
 			};
 		}}
 	>
