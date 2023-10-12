@@ -16,7 +16,7 @@
 	<h4>Share this link with your friend to start playing:</h4>
 	<p class="info">
 		<span class="url">{url}</span>
-		<button class="copy" on:click={onCopyClick}>Copy</button>
+		<button class="copy-btn" on:click={onCopyClick}>Copy</button>
 	</p>
 </div>
 
@@ -28,10 +28,26 @@
 		margin: 1rem 0;
 		border-radius: 8px;
 	}
-	.copy {
-		margin-left: 1rem;
+	@media (max-width: 400px) {
+		.info {
+			flex-direction: column;
+		}
+	}
+	.info {
+		display: flex;
+		align-items: baseline;
+		justify-content: flex-start;
+		gap: 1rem;
+	}
+	.copy-btn {
+		margin: 0;
+		margin-top: 1rem;
 		padding: 4px 8px;
 		background-color: var(--button-bg-color);
+		color: var(--text-color);
+
+		border: 2px solid var(--grid-border-color);
+		cursor: copy;
 	}
 	.url {
 		font-size: 90%;
