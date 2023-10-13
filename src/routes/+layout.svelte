@@ -6,6 +6,7 @@
   import Footer from '$lib/components/Footer.svelte';
   import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte';
   import MetaTags from '$lib/components/MetaTags.svelte';
+  import SoundControl from '$lib/components/SoundControl.svelte';
 </script>
 
 <InitialThemeSetter />
@@ -20,6 +21,7 @@
       <Logo />
     </div>
     <div class="theme-selector-container">
+      <SoundControl />
       <ThemeSelector />
     </div>
   </header>

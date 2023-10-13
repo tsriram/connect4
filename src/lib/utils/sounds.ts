@@ -1,3 +1,6 @@
+import { soundEnabled } from '$lib/store';
+import { get } from 'svelte/store';
+
 let coinDropSounds: HTMLAudioElement[];
 let winningSound: HTMLAudioElement;
 
@@ -21,15 +24,17 @@ export function initSounds() {
 }
 
 export function playCoinDrop(rowNumber: number) {
-  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement/Audio#determining_when_playback_can_begin
   const coinDropSound = coinDropSounds[rowNumber];
-  if (coinDropSound.readyState >= 2) {
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement/Audio#determining_when_playback_can_begin
+  if (coinDropSound.readyState >= 2 && get(soundEnabled)) {
+    coinDropSound.volume = 0.75;
     coinDropSound.play();
   }
 }
 
 export function playWinningCelebration() {
-  if (winningSound.readyState >= 2) {
+  if (winningSound.readyState >= 2 && get(soundEnabled)) {
+    winningSound.volume = 0.5;
     winningSound.play();
   }
 }
