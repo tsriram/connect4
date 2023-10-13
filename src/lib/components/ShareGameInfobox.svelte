@@ -30,19 +30,27 @@
 	}
 </script>
 
-<div class="info-container">
-	{#if showShareButton}
-		<Button on:click={share}>Invite a fried to play!</Button>
-	{:else}
+{#if showShareButton}
+	<div class="native-share-container">
+		<Button on:click={share}>Share link with a friend to play!</Button>
+	</div>
+{:else}
+	<div class="info-container">
 		<h4>Share this link with your friend to start playing:</h4>
 		<p class="info">
 			<span class="url">{url}</span>
 			<button class="copy-btn" on:click={onCopyClick}>Copy</button>
 		</p>
-	{/if}
-</div>
+	</div>
+{/if}
 
 <style>
+	.native-share-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: 2rem 0;
+	}
 	.info-container {
 		background-color: var(--info-box-bg-color);
 		color: var(--info-box-text-color);
