@@ -1,55 +1,55 @@
 html,
 body {
-	height: 100%;
+  height: 100%;
 }
 
 body {
-	padding: 0;
-	margin: 0;
-	background-color: var(--bg-color);
-	/* background-color: #f0ebd8; */
-	color: var(--text-color);
-	transition: all 500ms;
-	box-sizing: border-box;
-	font-family: sans-serif;
+  padding: 0;
+  margin: 0;
+  background-color: var(--bg-color);
+  /* background-color: #f0ebd8; */
+  color: var(--text-color);
+  transition: all 500ms;
+  box-sizing: border-box;
+  font-family: sans-serif;
 }
 
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html.dark {
-	--bg-color: #243447;
-	--text-color: #fff;
-	--grid-border-color: #3d5566;
-	--cell-bg-color: #243447;
-	--player1-color: #fde047;
-	--player1-border-color: #eab308;
-	--player2-color: #ef4444;
-	--player2-border-color: #b91c1c;
-	--logo-url: url('/images/connect4-logo-dark.png');
-	--board-bg-color: #3d5566;
-	--button-bg-color: #1b2836;
-	--button-text-color: #fff;
-	--footer-link-color: hotpink;
-	--info-box-bg-color: #334155;
-	--info-box-text-color: #fff;
+  --bg-color: #243447;
+  --text-color: #fff;
+  --grid-border-color: #3d5566;
+  --cell-bg-color: #243447;
+  --player1-color: #fde047;
+  --player1-border-color: #eab308;
+  --player2-color: #ef4444;
+  --player2-border-color: #b91c1c;
+  --logo-url: url('/images/connect4-logo-dark.png');
+  --board-bg-color: #3d5566;
+  --button-bg-color: #1b2836;
+  --button-text-color: #fff;
+  --footer-link-color: hotpink;
+  --info-box-bg-color: #334155;
+  --info-box-text-color: #fff;
 }
 
 html.light {
-	--bg-color: #f1f5f9;
-	--text-color: #1b2836;
-	--grid-border-color: #655e56;
-	--cell-bg-color: #f1f5f9;
-	--player1-color: #fde047;
-	--player1-border-color: #eab308;
-	--player2-color: #ef4444;
-	--player2-border-color: #b91c1c;
-	--logo-url: url('/images/connect4-logo-light.png');
-	--board-bg-color: #2563eb;
-	--button-bg-color: #f1f5f9;
-	--button-text-color: #1b2836;
-	--footer-link-color: #4338ca;
-	--info-box-bg-color: #bfdbfe;
-	--info-box-text-color: #1b2836;
+  --bg-color: #f1f5f9;
+  --text-color: #1b2836;
+  --grid-border-color: #655e56;
+  --cell-bg-color: #f1f5f9;
+  --player1-color: #fde047;
+  --player1-border-color: #eab308;
+  --player2-color: #ef4444;
+  --player2-border-color: #b91c1c;
+  --logo-url: url('/images/connect4-logo-light.png');
+  --board-bg-color: #2563eb;
+  --button-bg-color: #f1f5f9;
+  --button-text-color: #1b2836;
+  --footer-link-color: #4338ca;
+  --info-box-bg-color: #bfdbfe;
+  --info-box-text-color: #1b2836;
 }
