@@ -53,7 +53,7 @@ export function findConsecutiveNonZeroElements(board: number[][]): number | null
 	// horizontal
 	for (let row = 0; row < numRows; row++) {
 		let consecutiveCount = 1;
-		let prevElement = row[0];
+		let prevElement = board[row][0];
 		for (let col = 1; col < numCols; col++) {
 			const currentElement = board[row][col];
 			if (currentElement !== 0 && prevElement === currentElement) {
@@ -71,7 +71,7 @@ export function findConsecutiveNonZeroElements(board: number[][]): number | null
 	// vertical
 	for (let col = 0; col < numCols; col++) {
 		let consecutiveCount = 1;
-		let prevElement = col[0];
+		let prevElement = board[0][col];
 		for (let row = 1; row < numRows; row++) {
 			const currentElement = board[row][col];
 			if (currentElement !== 0 && prevElement === currentElement) {

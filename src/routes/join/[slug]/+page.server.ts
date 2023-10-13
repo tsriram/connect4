@@ -4,7 +4,7 @@ import { getPartyKitRoomUrl } from '$lib/utils/party';
 import type { PartyData } from '$lib/types';
 import { nanoid } from 'nanoid';
 
-export const load: PageServerLoad = async ({ params, fetch }) => {
+export const load: PageServerLoad = async ({ params, fetch, cookies }) => {
 	const room = params.slug;
 
 	const partykitUrl = getPartyKitRoomUrl(room);
@@ -14,8 +14,11 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 		if (playerCount >= 2) {
 			throw error(409);
 		}
+		const username = cookies.get('username');
+		return { username };
 		return {
-			player1Name: gameState.player1.name
+			player1Name: gameState.player1.name,
+			username
 		};
 	} else if (partyResponse.status === 404) {
 		throw error(404);

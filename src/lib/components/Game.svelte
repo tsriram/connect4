@@ -7,7 +7,6 @@
 	import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
 	import { spring, type Spring } from 'svelte/motion';
 	import ShareGameInfobox from '$lib/components/ShareGameInfobox.svelte';
-	import { trackGameRestart } from '$lib/analytics';
 
 	export let gameState: GameState;
 	export let room: string;
@@ -31,17 +30,9 @@
 		}
 	});
 
-	function restartGame() {
-		socket.send(
-			JSON.stringify({
-				type: MessageType.RESTART
-			})
-		);
-		trackGameRestart();
-	}
-
 	function onMessage(event: MessageEvent) {
 		gameState = JSON.parse(event.data);
+		console.log('gameState: ', gameState);
 
 		if (gameState.newCoinCol !== null && gameState.newCoinRow !== null) {
 			// get the row to which the new coin was added
@@ -108,7 +99,6 @@
 		{socketDisconnected}
 		{handleClick}
 		currentUserId={socket.id}
-		onRestart={restartGame}
 		{transformSpring}
 	/>
 </div>

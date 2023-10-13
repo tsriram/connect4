@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { trackGameCompletion } from '$lib/analytics';
 	import Button from '$lib/components/Button.svelte';
+	import LinkButton from '$lib/components/LinkButton.svelte';
 	import { GAME_STATUS } from '$lib/types';
 	import confetti from 'canvas-confetti';
 	import { afterUpdate, beforeUpdate } from 'svelte';
@@ -9,13 +10,22 @@
 	let showStartNewGame: boolean = false;
 
 	export let message: string;
-	export let onRestart: () => void;
 	export let isWinner: boolean;
 	export let gameStatus: GAME_STATUS;
+
+	function onRestart1() {}
 
 	beforeUpdate(() => {
 		showRestartButton = gameStatus === GAME_STATUS.COMPLETED;
 		showStartNewGame = gameStatus === GAME_STATUS.PLAYER_DISCONNECTED;
+
+		if (gameStatus === GAME_STATUS.COMPLETED) {
+			if (isWinner) {
+				message = 'Yay! you won 🎉🎉🎉';
+			} else {
+				message = 'Oops, you lost this game :(';
+			}
+		}
 	});
 
 	function boom() {
@@ -50,7 +60,8 @@
 <div class="grid-overlay">
 	<h2>{message}</h2>
 	{#if showRestartButton}
-		<Button on:click={onRestart}>Restart game</Button>
+		<!-- <Button on:click={onRestart}>Restart game</Button> -->
+		<LinkButton href="/">Start a new game</LinkButton>
 	{/if}
 	{#if showStartNewGame}
 		<a href="/" class="start-game">Or start a new game?</a>

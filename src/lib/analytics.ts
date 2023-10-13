@@ -26,15 +26,6 @@ export function trackGameCompletion() {
 	}
 }
 
-export function trackGameRestart() {
-	if (browser) {
-		window.gtag('event', 'game_restarted', {
-			event_category: 'Game',
-			event_label: 'Game restarted'
-		});
-	}
-}
-
 export function trackShare() {
 	if (browser) {
 		window.gtag('event', 'game_restarted', {

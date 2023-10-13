@@ -5,13 +5,6 @@ import { findConsecutiveNonZeroElements, updateBoard, isBoardFull } from './game
 const MAX_USERS_PER_ROOM = 2;
 const BOARD_VALUE_FOR_PLAYER1 = 1;
 const BOARD_VALUE_FOR_PLAYER2 = 2;
-// const json = (response: string) => {
-// 	return new Response(response, {
-// 		headers: {
-// 			'Content-Type': 'application/json'
-// 		}
-// 	});
-// };
 
 const messages = {
 	[GAME_STATUS.INITIAL]: 'Initial state',
@@ -125,18 +118,6 @@ export default class Server implements Party.Server {
 		this.state = Server.getInitialState();
 	}
 
-	restartGame() {
-		const initialState = Server.getInitialState();
-		this.state = {
-			...initialState,
-			waitingFor: this.state.player1.id,
-			player1: this.state.player1,
-			player2: this.state.player2,
-			status: GAME_STATUS.PLAYING,
-			message: `${this.state.player1.name} vs ${this.state.player2.name}`
-		};
-	}
-
 	static getInitialState(): GameState {
 		const initialState: GameState = {
 			slug: undefined,
@@ -169,10 +150,10 @@ export default class Server implements Party.Server {
 	}
 
 	async onClose(connection: Party.Connection): Promise<void> {
-		// const playerCount = [...this.party.getConnections()].length;
-		// if (playerCount === 0) {
-		// 	this.resetState();
-		// } else {
+		if (this.state.status === GAME_STATUS.COMPLETED) {
+			return;
+		}
+
 		if (connection.id === this.state.player1.id) {
 			this.state.player1.connected = false;
 			this.state.message = `${this.state.player1.name} is disconnected! Waiting for them to join back...`;
@@ -181,14 +162,10 @@ export default class Server implements Party.Server {
 			this.state.message = `${this.state.player2.name} is disconnected! Waiting for them to join back...`;
 		}
 		this.state.status = GAME_STATUS.PLAYER_DISCONNECTED;
-		// const didPlayer1Close = this.state.player1.id === connection.id;
-		// const closedByPlayer = didPlayer1Close ? this.state.player1.name : this.state.player2.name;
-		// this.state.message = `Sorry, ${closedByPlayer} has disconnected. You can't continue this game :(`;
-		// this.state.status = GAME_STATUS.PLAYER_DISCONNECTED;
+
 		await this.party.storage.put(storageKey, this.state);
 		this.party.broadcast(JSON.stringify(this.state));
 		this.updateConnections('disconnect', connection);
-		// }
 	}
 
 	async onConnect(connection: Party.Connection) {
@@ -210,12 +187,16 @@ export default class Server implements Party.Server {
 				this.state.status = GAME_STATUS.WAITING_FOR_PLAYER2;
 				this.state.message = messages[this.state.status];
 			} else {
-				this.state.status = GAME_STATUS.PLAYING;
 				this.state.message = '';
+				console.log('onConnect else this.state.status: ', this.state.status);
+				this.state.status =
+					this.state.status !== GAME_STATUS.COMPLETED ? GAME_STATUS.PLAYING : this.state.status;
 			}
 		} else if (connection.id === this.state.player2.id) {
 			this.state.player2.connected = true;
-			this.state.status = GAME_STATUS.PLAYING;
+			console.log('onConnect elseif this.state.status: ', this.state.status);
+			this.state.status =
+				this.state.status !== GAME_STATUS.COMPLETED ? GAME_STATUS.PLAYING : this.state.status;
 			this.state.message = `${this.state.player1.name} vs ${this.state.player2.name}`;
 		}
 
@@ -226,9 +207,13 @@ export default class Server implements Party.Server {
 
 	async onMessage(message: string, sender: Party.Connection) {
 		const data = JSON.parse(message);
+		console.log('data: ', message);
 
 		switch (data.type) {
 			case MessageType.JOIN: {
+				if (this.state.status === GAME_STATUS.COMPLETED) {
+					return;
+				}
 				if (this.state.player1.name === undefined) {
 					this.state.player1.name = data.name;
 					this.state.player1.id = sender.id;
@@ -246,6 +231,9 @@ export default class Server implements Party.Server {
 			}
 
 			case MessageType.UPDATE: {
+				if (this.state.status === GAME_STATUS.COMPLETED) {
+					return;
+				}
 				if (this.state.waitingFor === sender.id && this.state.status === GAME_STATUS.PLAYING) {
 					const isPlayer1 = this.state.player1.id === sender.id;
 					const valueToUpdate = isPlayer1 ? BOARD_VALUE_FOR_PLAYER1 : BOARD_VALUE_FOR_PLAYER2;
@@ -259,17 +247,21 @@ export default class Server implements Party.Server {
 					if (isTied) {
 						this.state.status = GAME_STATUS.COMPLETED;
 						this.state.message = `Yay, both of you have won ;-)`;
+						this.state.waitingFor = undefined;
 						this.party.broadcast(JSON.stringify(this.state));
 						this.state.newCoinRow = null;
 						this.state.newCoinCol = null;
 					} else {
 						const winningNumber = findConsecutiveNonZeroElements(this.state.board);
+						console.log('winningNumber: ', winningNumber);
 						if (winningNumber === BOARD_VALUE_FOR_PLAYER1) {
 							this.state.status = GAME_STATUS.COMPLETED;
+							this.state.waitingFor = undefined;
 							this.state.message = `Yay, ${this.state.player1.name} won!`;
 							this.state.winner = this.state.player1.id;
 						} else if (winningNumber === BOARD_VALUE_FOR_PLAYER2) {
 							this.state.status = GAME_STATUS.COMPLETED;
+							this.state.waitingFor = undefined;
 							this.state.message = `Yay, ${this.state.player2.name} won!`;
 							this.state.winner = this.state.player2.id;
 						} else {
@@ -280,12 +272,6 @@ export default class Server implements Party.Server {
 						this.state.newCoinCol = null;
 					}
 				}
-				break;
-			}
-
-			case MessageType.RESTART: {
-				this.restartGame();
-				this.party.broadcast(JSON.stringify(this.state));
 				break;
 			}
 

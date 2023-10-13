@@ -12,7 +12,7 @@
 			Hello! {data.player1Name} has invited you to play Connect 4.
 		</p>
 	{/if}
-	<GameForm type={GameFormType.JOIN} />
+	<GameForm type={GameFormType.JOIN} storedUserName={data.username} />
 </div>
 
 <style>

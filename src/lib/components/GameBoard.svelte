@@ -10,7 +10,6 @@
 	export let currentUserId: string;
 
 	export let handleClick: (colIndex: number) => void;
-	export let onRestart: () => void;
 
 	export let transformSpring: Spring<number>;
 
@@ -64,12 +63,7 @@
 				{/each}
 			{/each}
 			{#if showOverlay}
-				<GridOverlay
-					message={gameState.message}
-					{onRestart}
-					{isWinner}
-					gameStatus={gameState.status}
-				/>
+				<GridOverlay message={gameState.message} {isWinner} gameStatus={gameState.status} />
 			{/if}
 		</div>
 	{/if}
