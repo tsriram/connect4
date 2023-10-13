@@ -5,36 +5,24 @@
   export let turn: string;
   export let player1: Player;
   export let player2: Player;
+  export let currentUserId: string;
   let turnPlayerName = '???';
-  let turnPlayer: 'player1' | 'player2' | undefined = undefined;
+  let turnInfo = '';
   $: {
     if (turn !== undefined && player1.name !== undefined && player2.name !== undefined) {
-      turnPlayer = turn === player1.id ? 'player1' : 'player2';
       turnPlayerName = turn === player1.id ? player1.name : player2.name;
-    } else {
-      turnPlayerName = '???';
-      turnPlayer = undefined;
+      turnInfo = turn === currentUserId ? 'Your turn' : `${turnPlayerName}'s turn`;
     }
   }
 </script>
 
 <div class="game-turn">
-  <span class="label">Current turn:</span>
-  {turnPlayerName}
-  <!-- {#if turnPlayerName !== undefined}
-		<HeaderCoin player={turnPlayer} />
-	{/if} -->
+  {turnInfo}
 </div>
 
 <style>
   .game-turn {
     display: flex;
     align-items: center;
-    /* margin-right: -16px; */
-    align-self: flex-start;
-  }
-  .label {
-    opacity: 80%;
-    margin-right: 1rem;
   }
 </style>

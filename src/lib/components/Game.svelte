@@ -100,6 +100,7 @@
     player1={gameState.player1}
     player2={gameState.player2}
     turn={gameState.waitingFor || '???'}
+    currentUserId={socket.id}
   />
   {#if gameState.status === GAME_STATUS.WAITING_FOR_PLAYER2}
     <ShareGameInfobox />

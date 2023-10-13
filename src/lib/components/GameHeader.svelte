@@ -6,11 +6,12 @@
   export let player1: Player;
   export let player2: Player;
   export let turn: string;
+  export let currentUserId: string;
 </script>
 
 <div class="game-header">
   <GameTitle {player1} {player2} />
-  <GameTurnIndicator {turn} {player1} {player2} />
+  <GameTurnIndicator {turn} {player1} {player2} {currentUserId} />
 </div>
 
 <style>
