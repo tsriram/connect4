@@ -8,6 +8,7 @@
 	export let gameState: GameState;
 	export let socketDisconnected = false;
 	export let currentUserId: string;
+	export let onRestart: () => void;
 
 	export let handleClick: (colIndex: number) => void;
 
@@ -63,7 +64,12 @@
 				{/each}
 			{/each}
 			{#if showOverlay}
-				<GridOverlay message={gameState.message} {isWinner} gameStatus={gameState.status} />
+				<GridOverlay
+					message={gameState.message}
+					{isWinner}
+					gameStatus={gameState.status}
+					{onRestart}
+				/>
 			{/if}
 		</div>
 	{/if}

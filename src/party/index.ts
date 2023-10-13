@@ -118,6 +118,20 @@ export default class Server implements Party.Server {
 		this.state = Server.getInitialState();
 	}
 
+	restartGame() {
+		console.log('restarting game');
+		const initialState = Server.getInitialState();
+		this.state = {
+			...initialState,
+			winner: undefined,
+			waitingFor: this.state.player1.id,
+			player1: this.state.player1,
+			player2: this.state.player2,
+			status: GAME_STATUS.PLAYING,
+			message: `${this.state.player1.name} vs ${this.state.player2.name}`
+		};
+	}
+
 	static getInitialState(): GameState {
 		const initialState: GameState = {
 			slug: undefined,
@@ -272,6 +286,12 @@ export default class Server implements Party.Server {
 						this.state.newCoinCol = null;
 					}
 				}
+				break;
+			}
+
+			case MessageType.RESTART: {
+				this.restartGame();
+				this.party.broadcast(JSON.stringify(this.state));
 				break;
 			}
 

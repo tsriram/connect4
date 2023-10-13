@@ -34,3 +34,12 @@ export function trackShare() {
 		});
 	}
 }
+
+export function trackGameRestart() {
+	if (browser) {
+		window.gtag('event', 'game_restarted', {
+			event_category: 'Game',
+			event_label: 'Game restarted'
+		});
+	}
+}

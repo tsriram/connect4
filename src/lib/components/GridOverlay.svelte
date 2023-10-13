@@ -12,8 +12,7 @@
 	export let message: string;
 	export let isWinner: boolean;
 	export let gameStatus: GAME_STATUS;
-
-	function onRestart1() {}
+	export let onRestart: () => void;
 
 	beforeUpdate(() => {
 		showRestartButton = gameStatus === GAME_STATUS.COMPLETED;
@@ -60,8 +59,7 @@
 <div class="grid-overlay">
 	<h2>{message}</h2>
 	{#if showRestartButton}
-		<!-- <Button on:click={onRestart}>Restart game</Button> -->
-		<LinkButton href="/">Start a new game</LinkButton>
+		<Button on:click={onRestart}>Play again</Button>
 	{/if}
 	{#if showStartNewGame}
 		<a href="/" class="start-game">Or start a new game?</a>

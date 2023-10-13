@@ -29,7 +29,8 @@ export interface GameState {
 
 export enum MessageType {
 	JOIN = 'join',
-	UPDATE = 'update'
+	UPDATE = 'update',
+	RESTART = 'restart'
 }
 
 export interface SlugData {

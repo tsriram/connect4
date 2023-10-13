@@ -7,6 +7,7 @@
 	import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
 	import { spring, type Spring } from 'svelte/motion';
 	import ShareGameInfobox from '$lib/components/ShareGameInfobox.svelte';
+	import { trackGameRestart } from '$lib/analytics';
 
 	export let gameState: GameState;
 	export let room: string;
@@ -29,6 +30,15 @@
 			console.error('Error setting row size');
 		}
 	});
+
+	function restartGame() {
+		socket.send(
+			JSON.stringify({
+				type: MessageType.RESTART
+			})
+		);
+		trackGameRestart();
+	}
 
 	function onMessage(event: MessageEvent) {
 		gameState = JSON.parse(event.data);
@@ -100,5 +110,6 @@
 		{handleClick}
 		currentUserId={socket.id}
 		{transformSpring}
+		onRestart={restartGame}
 	/>
 </div>
