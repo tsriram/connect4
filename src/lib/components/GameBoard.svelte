@@ -41,6 +41,7 @@
       class:disabled={!isMyTurn && gameState.status !== GAME_STATUS.COMPLETED}
       class:player1={isPlayer1}
       class:player2={isPlayer2}
+      class:waiting={gameState.status === GAME_STATUS.WAITING_FOR_PLAYER2}
     >
       {#each gameState.board as row, rowIndex}
         {#each row as col, colIndex}
@@ -97,6 +98,9 @@
     border-radius: 8px;
     position: relative;
     margin-top: calc(var(--column-size) + var(--column-gap) + 1rem);
+  }
+  .grid.waiting {
+    margin-top: 1rem;
   }
   .grid.player1 {
     --coin-color: var(--player1-color);
