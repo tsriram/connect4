@@ -20,7 +20,7 @@
     flex-direction: column;
     gap: 2rem;
     align-items: center;
-    margin: 2rem 0;
+    margin: 1rem 0;
     font-size: 1.5rem;
   }
   @media (min-width: 720px) {
