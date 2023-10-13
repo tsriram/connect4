@@ -38,7 +38,7 @@
   {#if gameState?.status != GAME_STATUS.INITIAL}
     <div
       class="grid"
-      class:disabled={!isMyTurn}
+      class:disabled={!isMyTurn && gameState.status !== GAME_STATUS.COMPLETED}
       class:player1={isPlayer1}
       class:player2={isPlayer2}
     >
