@@ -3,6 +3,7 @@
   import Button from '$lib/components/Button.svelte';
   import LinkButton from '$lib/components/LinkButton.svelte';
   import { GAME_STATUS } from '$lib/types';
+  import { playWinningCelebration } from '$lib/utils/sounds';
   import confetti from 'canvas-confetti';
   import { afterUpdate, beforeUpdate } from 'svelte';
 
@@ -51,6 +52,7 @@
   afterUpdate(() => {
     if (isWinner) {
       boom();
+      playWinningCelebration();
       trackGameCompletion();
     }
   });

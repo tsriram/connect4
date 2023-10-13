@@ -8,6 +8,8 @@
   import { spring, type Spring } from 'svelte/motion';
   import ShareGameInfobox from '$lib/components/ShareGameInfobox.svelte';
   import { trackGameRestart } from '$lib/analytics';
+  import { initSounds, playCoinDrop } from '$lib/utils/sounds';
+  import { browser } from '$app/environment';
 
   export let gameState: GameState;
   export let room: string;
@@ -42,13 +44,13 @@
 
   function onMessage(event: MessageEvent) {
     gameState = JSON.parse(event.data);
-    console.log('gameState: ', gameState);
 
     if (gameState.newCoinCol !== null && gameState.newCoinRow !== null) {
       // get the row to which the new coin was added
       const position = (gameState.newCoinRow + 1) * (rowSize + rowGap) * -1;
       transformSpring = spring(position, { stiffness: 0.1, damping: 0.6 });
       transformSpring.set(0);
+      playCoinDrop(gameState.newCoinRow);
     }
   }
 
@@ -93,6 +95,9 @@
   }
 
   startGame();
+  if (browser) {
+    initSounds();
+  }
 </script>
 
 <div>
