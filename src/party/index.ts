@@ -58,7 +58,6 @@ export default class Server implements Party.Server {
   }
 
   async onStart(): Promise<void> {
-    console.log('main party started');
     const storedState = await this.party.storage.get<GameState>(storageKey);
     if (storedState !== undefined) {
       this.state = storedState;
@@ -66,7 +65,6 @@ export default class Server implements Party.Server {
   }
 
   async onRequest(request: Party.Request): Promise<Response> {
-    console.log('party onrequest');
     const url = new URL(request.url);
     // get `abc` from "http://127.0.0.1:1999/party/abc"
     const slug = url.pathname.substring(url.pathname.lastIndexOf('/') + 1);
@@ -99,7 +97,6 @@ export default class Server implements Party.Server {
     }
 
     if (request.method === 'GET') {
-      console.log('url: ', url);
       const storedState = await this.party.storage.get<GameState>(storageKey, {
         noCache: true
       });
@@ -119,7 +116,6 @@ export default class Server implements Party.Server {
   }
 
   restartGame() {
-    console.log('restarting game');
     const initialState = Server.getInitialState();
     this.state = {
       ...initialState,
@@ -185,7 +181,6 @@ export default class Server implements Party.Server {
   async onConnect(connection: Party.Connection) {
     // Close any new connection if there's already 2 players in the room
     const playerCount = [...this.party.getConnections()].length;
-    console.log('playerCount: ', playerCount);
     if (playerCount > MAX_USERS_PER_ROOM) {
       connection.send(
         JSON.stringify({ message: 'More than 2 players in this room. Try a new game' })
@@ -202,13 +197,11 @@ export default class Server implements Party.Server {
         this.state.message = messages[this.state.status];
       } else {
         this.state.message = '';
-        console.log('onConnect else this.state.status: ', this.state.status);
         this.state.status =
           this.state.status !== GAME_STATUS.COMPLETED ? GAME_STATUS.PLAYING : this.state.status;
       }
     } else if (connection.id === this.state.player2.id) {
       this.state.player2.connected = true;
-      console.log('onConnect elseif this.state.status: ', this.state.status);
       this.state.status =
         this.state.status !== GAME_STATUS.COMPLETED ? GAME_STATUS.PLAYING : this.state.status;
       this.state.message = `${this.state.player1.name} vs ${this.state.player2.name}`;
@@ -221,7 +214,6 @@ export default class Server implements Party.Server {
 
   async onMessage(message: string, sender: Party.Connection) {
     const data = JSON.parse(message);
-    console.log('data: ', message);
 
     switch (data.type) {
       case MessageType.JOIN: {
@@ -267,7 +259,6 @@ export default class Server implements Party.Server {
             this.state.newCoinCol = null;
           } else {
             const winningNumber = findConsecutiveNonZeroElements(this.state.board);
-            console.log('winningNumber: ', winningNumber);
             if (winningNumber === BOARD_VALUE_FOR_PLAYER1) {
               this.state.status = GAME_STATUS.COMPLETED;
               this.state.waitingFor = undefined;

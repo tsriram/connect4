@@ -3,7 +3,6 @@
   import Game from '$lib/components/Game.svelte';
   import DocumentTitle from '$lib/components/DocumentTitle.svelte';
   export let data: PageServerData;
-  console.log('load data: ', data.gameState);
 </script>
 
 <DocumentTitle title="Game" />

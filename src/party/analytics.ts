@@ -10,10 +10,6 @@ export default class Rooms implements Party.Server {
   totalConnections: number = 0;
   constructor(readonly party: Party.Party) {}
 
-  onStart(): void | Promise<void> {
-    console.log('Connections party started');
-  }
-
   async onRequest(request: Party.Request) {
     // read from storage
     this.connections = this.connections ?? (await this.party.storage.get('connections')) ?? {};
