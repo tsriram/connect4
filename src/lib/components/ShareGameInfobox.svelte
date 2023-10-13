@@ -3,15 +3,24 @@
 	import { trackShare } from '$lib/analytics';
 	import Button from '$lib/components/Button.svelte';
 	let url = '';
+	let copyButtonLabel = 'Copy';
 	const showShareButton = Boolean(navigator.share);
 
 	if (browser) {
 		url = window.location.toString();
 	}
 	function onCopyClick() {
-		navigator.clipboard.writeText(url).catch(function (err) {
-			console.error('Unable to copy text: ', err);
-		});
+		navigator.clipboard
+			.writeText(url)
+			.then(() => {
+				copyButtonLabel = 'Copied';
+				setTimeout(() => {
+					copyButtonLabel = 'Copy';
+				}, 3000);
+			})
+			.catch(function (err) {
+				console.error('Unable to copy text: ', err);
+			});
 	}
 
 	function share() {
@@ -39,7 +48,7 @@
 		<h4>Share this link with your friend to start playing:</h4>
 		<p class="info">
 			<span class="url">{url}</span>
-			<button class="copy-btn" on:click={onCopyClick}>Copy</button>
+			<button class="copy-btn" on:click={onCopyClick}>{copyButtonLabel}</button>
 		</p>
 	</div>
 {/if}
@@ -77,7 +86,7 @@
 		color: var(--text-color);
 
 		border: 2px solid var(--grid-border-color);
-		cursor: copy;
+		cursor: pointer;
 	}
 	.url {
 		font-size: 90%;
