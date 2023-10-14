@@ -10,8 +10,11 @@
 <DocumentTitle title="Home" />
 <div>
   <p class="help-text">
-    <a href="https://en.wikipedia.org/wiki/Connect_Four" rel="noopener" target="_blank"
-      >What's Connect 4?</a
+    <a
+      href="https://en.wikipedia.org/wiki/Connect_Four"
+      rel="noopener"
+      target="_blank"
+      aria-label="Link to Wikipedia page on Connect 4 game">What's Connect 4?</a
     >
   </p>
   <GameForm type={GameFormType.START} storedUserName={data.username} />

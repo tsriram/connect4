@@ -82,6 +82,9 @@
     justify-content: center;
     color: #fff;
   }
+  .grid-overlay h2 {
+    text-align: center;
+  }
   .start-game {
     margin-top: 2rem;
     color: #fff;
