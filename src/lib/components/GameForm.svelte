@@ -32,7 +32,7 @@
       };
     }}
   >
-    <label for="username">Enter your name: </label>
+    <label for="username">Enter your first name: </label>
     <!-- svelte-ignore a11y-autofocus -->
     <input
       class="username-input"
