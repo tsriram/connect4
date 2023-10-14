@@ -4,7 +4,10 @@
   import Button from '$lib/components/Button.svelte';
   let url = '';
   let copyButtonLabel = 'Copy';
-  const showShareButton = Boolean(navigator.share);
+  let showShareButton = false;
+  if (browser) {
+    Boolean(navigator.share);
+  }
 
   if (browser) {
     url = window.location.toString();
