@@ -103,7 +103,7 @@
     turn={gameState.waitingFor || '???'}
     currentUserId={socket.id}
   />
-  {#if gameState.status === GAME_STATUS.WAITING_FOR_PLAYER2}
+  {#if gameState.player2.id === undefined}
     <ShareGameInfobox />
   {/if}
   <GameBoard
