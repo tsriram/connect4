@@ -24,7 +24,9 @@
 <div class="wrapper">
   <header class="header">
     <div class="logo-container">
-      <Logo />
+      <a href="/">
+        <Logo />
+      </a>
     </div>
     <div class="theme-selector-container">
       <SoundControl />
