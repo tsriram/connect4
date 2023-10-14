@@ -1,7 +1,7 @@
 <script lang="ts">
   import GameBoard from '$lib/components/GameBoard.svelte';
   import GameHeader from '$lib/components/GameHeader.svelte';
-  import { onDestroy, onMount } from 'svelte';
+  import { afterUpdate, onDestroy } from 'svelte';
   import { MessageType, type GameState, type SlugData, GAME_STATUS } from '$lib/types';
   import PartySocket from 'partysocket';
   import { PUBLIC_PARTYKIT_HOST } from '$env/static/public';
@@ -21,7 +21,7 @@
   // default to 80px (desktop size)
   let rowSize = 80;
   let rowGap = 20;
-  onMount(() => {
+  afterUpdate(() => {
     try {
       const grid = document.querySelector('.grid');
       if (grid) {
