@@ -70,5 +70,6 @@
   .username-input {
     font-size: 1.5rem;
     padding: 8px;
+    outline: 4px solid var(--grid-border-color);
   }
 </style>
