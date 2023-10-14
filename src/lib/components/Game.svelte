@@ -8,8 +8,7 @@
   import { spring, type Spring } from 'svelte/motion';
   import ShareGameInfobox from '$lib/components/ShareGameInfobox.svelte';
   import { trackGameRestart } from '$lib/analytics';
-  import { initSounds, playCoinDrop } from '$lib/utils/sounds';
-  import { browser } from '$app/environment';
+  import { playCoinDrop } from '$lib/utils/sounds';
 
   export let gameState: GameState;
   export let room: string;
@@ -95,9 +94,6 @@
   }
 
   startGame();
-  if (browser) {
-    initSounds();
-  }
 </script>
 
 <div>

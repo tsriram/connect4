@@ -3,6 +3,7 @@ import { get } from 'svelte/store';
 
 let coinDropSounds: HTMLAudioElement[];
 let winningSound: HTMLAudioElement;
+let soundOn: HTMLAudioElement;
 
 export function initSounds() {
   // rows in the board are in reverse order. Bottom most is 5, which
@@ -21,6 +22,9 @@ export function initSounds() {
   // winning celebration
   winningSound = new Audio('/audio/winning-celebration.mp3');
   winningSound.preload = 'auto';
+
+  // sound on
+  soundOn = new Audio('/audio/sound-on.mp3');
 }
 
 export function playCoinDrop(rowNumber: number) {
@@ -36,5 +40,12 @@ export function playWinningCelebration() {
   if (winningSound.readyState >= 2 && get(soundEnabled)) {
     winningSound.volume = 0.25;
     winningSound.play();
+  }
+}
+
+export function playSoundOn() {
+  if (coinDropSounds[0].readyState >= 2 && get(soundEnabled)) {
+    soundOn.volume = 1;
+    soundOn.play();
   }
 }

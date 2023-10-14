@@ -5,6 +5,7 @@
   import { browser } from '$app/environment';
   import { SOUND_KEY } from '$lib/constants';
   import { soundEnabled } from '$lib/store';
+  import { playSoundOn } from '$lib/utils/sounds';
 
   let resolvedSoundPreference: string;
 
@@ -28,6 +29,7 @@
     try {
       setItem(SOUND_KEY, resolvedSoundPreference);
       updateStore();
+      playSoundOn();
     } catch (e) {
       // ignore
     }

@@ -7,6 +7,12 @@
   import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte';
   import MetaTags from '$lib/components/MetaTags.svelte';
   import SoundControl from '$lib/components/SoundControl.svelte';
+  import { initSounds } from '$lib/utils/sounds';
+  import { browser } from '$app/environment';
+
+  if (browser) {
+    initSounds();
+  }
 </script>
 
 <InitialThemeSetter />
