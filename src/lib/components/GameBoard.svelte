@@ -139,37 +139,39 @@
     align-items: center;
     justify-content: center;
   }
-  .cell:hover::before {
-    content: '';
-    position: absolute;
-    top: calc((var(--column-size) * -1) + (var(--column-gap) * -1));
-    width: var(--column-size);
-    height: var(--column-size);
-    border-radius: 50%;
-    background-color: var(--coin-color);
-    border-color: var(--coin-border-color);
-    background-image: conic-gradient(
-      var(--coin-color),
-      var(--coin-border-color),
-      var(--coin-color),
-      var(--coin-border-color),
-      var(--coin-color),
-      var(--coin-border-color),
-      var(--coin-color),
-      var(--coin-border-color),
-      var(--coin-color),
-      var(--coin-border-color),
-      var(--coin-color)
-    );
-  }
-  .cell:hover::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: calc(var(--column-size) + var(--column-gap));
-    height: 100%;
-    background-color: var(--board-bg-color);
-    opacity: 0.3;
+  @media (hover: hover) {
+    .cell:hover::before {
+      content: '';
+      position: absolute;
+      top: calc((var(--column-size) * -1) + (var(--column-gap) * -1));
+      width: var(--column-size);
+      height: var(--column-size);
+      border-radius: 50%;
+      background-color: var(--coin-color);
+      border-color: var(--coin-border-color);
+      background-image: conic-gradient(
+        var(--coin-color),
+        var(--coin-border-color),
+        var(--coin-color),
+        var(--coin-border-color),
+        var(--coin-color),
+        var(--coin-border-color),
+        var(--coin-color),
+        var(--coin-border-color),
+        var(--coin-color),
+        var(--coin-border-color),
+        var(--coin-color)
+      );
+    }
+    .cell:hover::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: calc(var(--column-size) + var(--column-gap));
+      height: 100%;
+      background-color: var(--board-bg-color);
+      opacity: 0.3;
+    }
   }
   .coin.player1 {
     background-color: var(--player1-color);
@@ -188,6 +190,7 @@
       var(--player1-color)
     );
   }
+
   .coin.player2 {
     background-color: var(--player2-color);
     border-color: var(--player2-border-color);
