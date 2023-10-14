@@ -38,7 +38,7 @@ export function playCoinDrop(rowNumber: number) {
 
 export function playWinningCelebration() {
   if (winningSound.readyState >= 2 && get(soundEnabled)) {
-    winningSound.volume = 0.25;
+    winningSound.volume = 0.75;
     winningSound.play();
   }
 }
