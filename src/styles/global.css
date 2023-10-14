@@ -7,7 +7,6 @@ body {
   padding: 0;
   margin: 0;
   background-color: var(--bg-color);
-  /* background-color: #f0ebd8; */
   color: var(--text-color);
   transition: all 500ms;
   box-sizing: border-box;
@@ -34,6 +33,7 @@ html.dark {
   --footer-link-color: hotpink;
   --info-box-bg-color: #334155;
   --info-box-text-color: #fff;
+  --help-text-color: #cbd5e1;
 }
 
 html.light {
@@ -52,4 +52,5 @@ html.light {
   --footer-link-color: #4338ca;
   --info-box-bg-color: #bfdbfe;
   --info-box-text-color: #1b2836;
+  --help-text-color: #1e293b;
 }

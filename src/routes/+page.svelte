@@ -25,7 +25,7 @@
   }
 
   .help-text a {
-    color: var(--text-color);
+    color: var(--help-text-color);
     text-decoration: none;
   }
   .help-text a:hover {
