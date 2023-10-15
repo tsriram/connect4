@@ -18,6 +18,13 @@
     content="Play Connect 4 Online - Challenge friends in this classic strategy game. Connect four in a row to claim victory!"
   />
   <meta name="twitter:card" content="summary_large_image" />
+
+ <meta property="twitter:title" content="Connect 4" />
+  <meta
+    property="twitter:description"
+    content="Play Connect 4 Online - Challenge friends in this classic strategy game. Connect four in a row to claim victory!"
+  />
+
   <meta name="twitter:site" content="@tsriram" />
   <meta name="twitter:image" content="https://connect4.live/images/social.png" />
   <meta name="theme-color" content="#243447" />
