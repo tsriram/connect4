@@ -73,6 +73,7 @@
           {isWinner}
           gameStatus={gameState.status}
           {onRestart}
+          slug={gameState.slug}
         />
       {/if}
     </div>

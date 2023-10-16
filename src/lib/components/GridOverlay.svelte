@@ -1,22 +1,32 @@
 <script lang="ts">
-  import { trackGameCompletion } from '$lib/analytics';
+  import { browser } from '$app/environment';
+  import { trackGameCompletion, trackShare } from '$lib/analytics';
   import Button from '$lib/components/Button.svelte';
   import LinkButton from '$lib/components/LinkButton.svelte';
+  import SocialShare from '$lib/components/SocialShare.svelte';
   import { GAME_STATUS } from '$lib/types';
   import { playWinningCelebration } from '$lib/utils/sounds';
+  import { getItem, setItem } from '$lib/utils/storage';
   import confetti from 'canvas-confetti';
   import { afterUpdate, beforeUpdate } from 'svelte';
-
-  let showRestartButton: boolean = false;
-  let showStartNewGame: boolean = false;
 
   export let message: string;
   export let isWinner: boolean;
   export let gameStatus: GAME_STATUS;
   export let onRestart: () => void;
+  export let slug: string | undefined;
+
+  let showStartNewGame: boolean = false;
+  let hasNativeShare: boolean = false;
+  if (browser && Boolean(navigator.share)) {
+    hasNativeShare = true;
+  }
+  const shareText =
+    'Just claimed victory in an epic online Connect 4 battle! Play now on https://connect4.live 🏆🟡🔴';
+  const shareUrl = 'https://connect4.live';
+  const winningsKey = 'connect4:wins';
 
   beforeUpdate(() => {
-    showRestartButton = gameStatus === GAME_STATUS.COMPLETED;
     showStartNewGame = gameStatus === GAME_STATUS.PLAYER_DISCONNECTED;
 
     if (gameStatus === GAME_STATUS.COMPLETED) {
@@ -27,6 +37,32 @@
       }
     }
   });
+
+  function share() {
+    navigator
+      .share({
+        title: `Connect 4`,
+        text: shareText,
+        url: shareUrl
+      })
+      .then(trackShare)
+      .catch((error) => console.log('Error sharing', error));
+  }
+
+  function celebrate() {
+    if (!slug) {
+      return;
+    }
+    const winsData = getItem(winningsKey);
+    const wins: string[] = winsData ? JSON.parse(winsData) : [];
+    if (wins && wins.includes(slug)) {
+      return;
+    }
+    wins.push(slug);
+    setItem(winningsKey, JSON.stringify(wins));
+    playWinningCelebration();
+    boom();
+  }
 
   function boom() {
     confetti({
@@ -51,8 +87,7 @@
 
   afterUpdate(() => {
     if (isWinner) {
-      boom();
-      playWinningCelebration();
+      celebrate();
       trackGameCompletion();
     }
   });
@@ -60,7 +95,14 @@
 
 <div class="grid-overlay">
   <h2>{message}</h2>
-  {#if showRestartButton}
+  {#if isWinner}
+    {#if hasNativeShare}
+      <Button on:click={share}>Tell the world!</Button>
+    {:else}
+      <h3>Share this with your friends!</h3>
+      <SocialShare text={shareText} url={shareUrl} />
+    {/if}
+    <div class="divider" />
     <Button on:click={onRestart}>Play again</Button>
   {/if}
   {#if showStartNewGame}
@@ -89,5 +131,11 @@
     margin-top: 2rem;
     color: #fff;
     font-size: 1.25rem;
+  }
+  .divider {
+    width: 80%;
+    height: 1px;
+    background-color: #fff;
+    margin-top: 1.5rem;
   }
 </style>
