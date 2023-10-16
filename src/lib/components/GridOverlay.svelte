@@ -16,7 +16,6 @@
   export let onRestart: () => void;
   export let slug: string | undefined;
 
-  let showRestartButton: boolean = false;
   let showStartNewGame: boolean = false;
   let hasNativeShare: boolean = false;
   if (browser && Boolean(navigator.share)) {
@@ -28,7 +27,6 @@
   const winningsKey = 'connect4:wins';
 
   beforeUpdate(() => {
-    showRestartButton = gameStatus === GAME_STATUS.COMPLETED;
     showStartNewGame = gameStatus === GAME_STATUS.PLAYER_DISCONNECTED;
 
     if (gameStatus === GAME_STATUS.COMPLETED) {
@@ -97,7 +95,7 @@
 
 <div class="grid-overlay">
   <h2>{message}</h2>
-  {#if showRestartButton}
+  {#if isWinner}
     {#if hasNativeShare}
       <Button on:click={share}>Tell the world!</Button>
     {:else}
