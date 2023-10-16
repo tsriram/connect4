@@ -136,6 +136,6 @@
     width: 80%;
     height: 1px;
     background-color: #fff;
-    margin: 1rem 0;
+    margin-top: 1.5rem;
   }
 </style>
