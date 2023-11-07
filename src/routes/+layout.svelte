@@ -9,6 +9,7 @@
   import SoundControl from '$lib/components/SoundControl.svelte';
   import { initSounds } from '$lib/utils/sounds';
   import { browser } from '$app/environment';
+  import UmamiAnalytics from '$lib/components/UmamiAnalytics.svelte';
 
   if (browser) {
     initSounds();
@@ -38,6 +39,7 @@
   </section>
   <Footer />
   <GoogleAnalytics />
+  <UmamiAnalytics />
 </div>
 
 <style>
