@@ -8,11 +8,13 @@ export function trackGameEvent(type: GameFormType) {
         event_category: 'Game',
         event_label: 'New game'
       });
+      window.umami.track('new_game');
     } else if (type === GameFormType.JOIN) {
       window.gtag('event', 'join_game', {
         event_category: 'Game',
         event_label: 'Join game'
       });
+      window.umami.track('join_game');
     }
   }
 }
@@ -23,15 +25,17 @@ export function trackGameCompletion() {
       event_category: 'Game',
       event_label: 'Game completed'
     });
+    window.umami.track('game_completed');
   }
 }
 
 export function trackShare() {
   if (browser) {
-    window.gtag('event', 'game_restarted', {
+    window.gtag('event', 'social_share', {
       event_category: 'Game',
-      event_label: 'Game shared'
+      event_label: 'Social share'
     });
+    window.umami.track('social_share');
   }
 }
 
@@ -41,5 +45,6 @@ export function trackGameRestart() {
       event_category: 'Game',
       event_label: 'Game restarted'
     });
+    window.umami.track('game_restarted');
   }
 }
